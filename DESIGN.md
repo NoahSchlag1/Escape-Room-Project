@@ -5,7 +5,7 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
 ## Setting
 
 - Du bist auf einem **Raumschiff** auf dem Weg zu einem fremden Planeten. Er sieht aus wie der Mars, aber dort leben seltsame Kreaturen.
-- Ein Meteorit hat den **Sauerstoffgenerator** getroffen, zwei Räume vom Flur entfernt. Wenn er nicht repariert wird, geht die Luft aus.
+- Ein Meteorit hat das Schiff gestreift und dabei den **Sauerstoffgenerator** beschädigt, zwei Räume vom Flur entfernt. Wenn er nicht repariert wird, geht die Luft aus.
 - Timer: **10 Minuten**. Der Wert wird durch Testspielen angepasst.
 
 ## Ablauf
@@ -15,7 +15,7 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
 2. –3. Überleitung auf das Schiff: „Du bist im Flur …“
 
 ### Raum 1: Flur
-- **Start:** Durchs Fenster sieht man den **Zielplaneten**. Dann gehen das rote Alarmlicht und die Durchsage los: Meteoriteneinschlag, der Sauerstoffgenerator ist beschädigt. Ab jetzt läuft der Timer.
+- **Start:** Durchs Fenster sieht man den **Zielplaneten**. Dann gehen das rote Alarmlicht und die Durchsage los: Ein Meteorit hat das Schiff gestreift, der Sauerstoffgenerator ist beschädigt. Ab jetzt läuft der Timer.
 - **Objekte:**
   - **Fenster:** Blick auf den Zielplaneten, nur Atmosphäre
   - **Feuerlöscher:** Ablenkung ohne Nutzen
@@ -40,7 +40,7 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
 - **Reparatur:** Man braucht den **Spezial-Schraubenzieher**. Er liegt im Flur (Raum 1).
   - Ohne Schraubenzieher erscheint beim Klick auf den Generator nur ein Hinweis, z. B.: „Diese Spezialschrauben bekommst du mit bloßen Händen nicht auf … Vielleicht hast du im Flur etwas übersehen?“
   - Mit Schraubenzieher ist der Generator repariert. Das führt zum Ende „Gerettet“.
-- **Aussehen:** Proben vom Planeten in leuchtenden Glastanks, darin seltsame Kreaturen. Der Generator steht qualmend in der Ecke, in der Wand ein Riss vom Meteoriteneinschlag.
+- **Aussehen:** Proben vom Planeten in leuchtenden Glastanks, darin seltsame Kreaturen. Der Generator steht qualmend in der Ecke, in der Wand ein Riss, wo der Meteorit die Außenwand gestreift hat.
 
 ## Enden
 - **Gerettet:** Der Sauerstoffgenerator ist rechtzeitig repariert. Das Schiff landet auf dem Planeten, danach kommen Outro-Bilder vom Planeten und seinen Kreaturen.

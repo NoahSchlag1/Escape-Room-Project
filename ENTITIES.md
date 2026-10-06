@@ -3,8 +3,8 @@
 ## Die Story in drei Sätzen
 
 Du bist im Flur eines Raumschiffs, durchs Fenster siehst du schon den fremden Zielplaneten.
-Eine Durchsage meldet: Zwei Räume weiter hat ein Meteorit den Sauerstoffgenerator im Labor getroffen. Repariere ihn, bevor der Timer abläuft.
-Die automatische Tür ist durch den Einschlag kaputt. Du brauchst eine Brechstange, um sie aufzuhebeln.
+Eine Durchsage meldet: Zwei Räume weiter hat ein Meteorit das Schiff am Labor gestreift und den Sauerstoffgenerator beschädigt. Repariere ihn, bevor der Timer abläuft.
+Die automatische Tür ist durch die Erschütterung kaputt. Du brauchst eine Brechstange, um sie aufzuhebeln.
 
 Den genauen Ablauf beschreibt [DESIGN.md](DESIGN.md).
 

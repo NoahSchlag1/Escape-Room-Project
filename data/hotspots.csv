@@ -15,7 +15,7 @@ becher,crew,Umgekippter Becher,57,86,5,8,"Ein umgekippter Kaffeebecher. Wer auch
 tuer_flur,crew,Tür zum Flur,0,8,12,86,,,,,flur
 schott,crew,Sicherheitsschott,80.5,10,19.5,88,,,,,labor
 tanks,labor,Glastanks,14.5,25,30,66,In grünlicher Flüssigkeit schweben Kreaturen mit sechs Beinen. Eine scheint dich anzusehen.,,,,
-riss,labor,Riss in der Wand,48.5,3,22,60,Hier hat der Meteorit eingeschlagen. Ein Notfall-Schaumpflaster hält den Riss gerade so dicht.,,,,
+riss,labor,Riss in der Wand,48.5,3,22,60,Hier hat der Meteorit die Außenwand aufgerissen. Ein Notfall-Schaumpflaster hält den Riss gerade so dicht.,,,,
 generator,labor,Sauerstoffgenerator,71.5,31,26,53,,,,,ende_gerettet
 werkzeug,labor,Schraubenschlüssel,53.5,87,11,8,Zwei Schraubenschlüssel. Für die sternförmigen Schrauben am Generator sind sie leider nutzlos.,,,,
 tuer_crew_zurueck,labor,Zurück,0,8,12.5,86,,,,,crew

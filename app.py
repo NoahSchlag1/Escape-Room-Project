@@ -24,14 +24,14 @@ FONT_FILES = ["Arial.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf", "Deja
 INTRO_SLIDES = [
     ("Intro 1.jpeg", "Ein fremder Planet. Rot wie der Mars – doch auf seiner Oberfläche bewegt sich etwas."),
     ("Intro 2.jpeg", "Seit 212 Tagen ist dein Raumschiff unterwegs zu ihm. Nur noch wenige Stunden bis zur Landung."),
-    ("Intro 3.jpeg", "Du gehst gerade durch den Flur, als ein dumpfer Schlag das ganze Schiff erschüttert …"),
+    ("Intro 3.jpeg", "Du gehst gerade durch den Flur, als ein kreischendes Schaben das ganze Schiff erschüttert …"),
 ]
 OUTRO_SLIDES = [
     ("Outro 1.jpeg", "Der Generator läuft. Das Schiff tritt in die Atmosphäre des roten Planeten ein."),
     ("Outro 2.jpeg", "Sanfte Landung. Durch das Fenster siehst du rote Dünen – und neugierige Kreaturen mit sechs Beinen."),
 ]
 ALARM_TEXT = (
-    "🚨 **DURCHSAGE:** Meteoriteneinschlag im Labor! Der Sauerstoffgenerator ist beschädigt. "
+    "🚨 **DURCHSAGE:** Ein Meteorit hat das Schiff gestreift! Die Außenwand am Labor ist aufgerissen, der Sauerstoffgenerator ist beschädigt. "
     "Restluft: 10 Minuten. Die automatischen Türen sind ausgefallen."
 )
 
