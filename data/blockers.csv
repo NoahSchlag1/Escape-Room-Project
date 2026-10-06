@@ -1,0 +1,4 @@
+id,name,required_item_id,locked_text,opened_text
+defekte_tuer,Defekte Automatiktür,brechstange,Die Tür klemmt einen Spalt breit. Mit bloßen Händen keine Chance.,Du setzt die Brechstange an und hebelst die Tür mit einem Ruck auf.
+schott,Sicherheitsschott,zugangskarte,Das Schott ist verriegelt. Das Lesegerät daneben blinkt rot: »Zugangskarte erforderlich.«,Du hältst die Zugangskarte ans Lesegerät. Grünes Licht – das Schott gleitet zur Seite.
+generator_schaden,Beschädigter Sauerstoffgenerator,schraubenzieher,Die Abdeckung ist mit sternförmigen Spezialschrauben gesichert. Mit bloßen Händen kommst du nicht weiter … Vielleicht hast du im Flur etwas übersehen?,"Du drehst die Spezialschrauben heraus, setzt die Leitung neu ein – der Generator springt brummend wieder an."

@@ -1,0 +1,3 @@
+id,room_id,name,kind,prompt,solution,reward_item_id,solved_text,wrong_text
+spind,flur,Spind mit Zahlenschloss,code,Ein vierstelliges Zahlenschloss. Jemand hat mit Filzstift »Baujahr!« daneben gekritzelt.,1973,brechstange,Klick! Der Spind springt auf. Darin: eine Brechstange.,Das Schloss piept rot. Falscher Code.
+kabel,crew,Stromkreis,cables,"Ein offenes Wandpanel mit vier Buchsen (1–4) und vier losen Kabeln: rot, gelb, grün, blau.","rot,gelb,gruen,blau",zugangskarte,"Funken, ein Summen – ein Fach springt auf. Darin liegt eine Zugangskarte.","Es knistert kurz, dann nichts. Die Reihenfolge stimmt nicht."

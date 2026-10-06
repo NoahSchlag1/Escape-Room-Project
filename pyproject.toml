@@ -1,0 +1,12 @@
+[project]
+name = "escape-room"
+version = "0.1.0"
+description = "Escape Room auf einer Raumstation"
+requires-python = ">=3.12"
+dependencies = ["streamlit", "streamlit-image-coordinates"]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

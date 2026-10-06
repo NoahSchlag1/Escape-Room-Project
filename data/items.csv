@@ -1,0 +1,5 @@
+id,name,description,start_room_id
+logbuch,Logbuch,Logbuch des Raumschiffs. Auf der ersten Seite steht in krakeliger Schrift: »Baujahr unseres Schiffs: 1973 – möge sie uns sicher zum roten Planeten bringen.«,flur
+schraubenzieher,Spezial-Schraubenzieher,Ein Schraubenzieher mit sternförmiger Spitze. Passt nicht auf normale Schrauben.,flur
+brechstange,Brechstange,"Schwer, kalt, leicht verbogen.",
+zugangskarte,Zugangskarte,Eine Keycard mit der Aufschrift »LABOR – nur autorisiertes Personal«.,
