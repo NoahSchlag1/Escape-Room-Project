@@ -43,6 +43,25 @@ ALARM_TEXT = (
 )
 ITEM_ICONS = {"logbuch": "📖", "schraubenzieher": "🪛", "brechstange": "🛠️", "zugangskarte": "💳"}
 
+# Große Zeichnungen für die Einblendung „You found …“ (Belohnung eines Rätsels)
+ITEM_ART = {
+    "brechstange": """<svg viewBox="0 0 200 200" width="220" height="220">
+        <path d="M58 166 L140 58" stroke="#5a1a10" stroke-width="22" stroke-linecap="round" fill="none"/>
+        <path d="M58 166 L140 58" stroke="#d2482f" stroke-width="15" stroke-linecap="round" fill="none"/>
+        <path d="M64 154 L134 62" stroke="#ff8a6a" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"/>
+        <path d="M140 58 C150 40 172 36 178 50 C183 62 172 72 160 66" stroke="#cfd6dc" stroke-width="14"
+              stroke-linecap="round" fill="none"/>
+        <path d="M58 166 L36 176 M58 166 L44 186" stroke="#cfd6dc" stroke-width="12" stroke-linecap="round"/>
+    </svg>""",
+    "zugangskarte": """<svg viewBox="0 0 200 200" width="220" height="220">
+        <rect x="30" y="55" width="140" height="90" rx="12" fill="#10283a" stroke="#2ee6d6" stroke-width="4"/>
+        <rect x="46" y="78" width="30" height="24" rx="4" fill="#ffb321"/>
+        <rect x="46" y="118" width="108" height="8" rx="4" fill="#2ee6d6" opacity=".7"/>
+        <rect x="90" y="80" width="64" height="6" rx="3" fill="#f6f1e7" opacity=".6"/>
+        <rect x="90" y="94" width="44" height="6" rx="3" fill="#f6f1e7" opacity=".4"/>
+    </svg>""",
+}
+
 
 # ---------- Zustand der Sitzung ----------
 
@@ -417,6 +436,28 @@ def inject_css(alarm=False):
             margin-top: 14px; text-transform: uppercase;
         }}
 
+        /* „You found …“: 3 Sekunden einblenden, dann verschwinden */
+        .found {{
+            position: fixed; inset: 0; z-index: 1002; pointer-events: none;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+            background: radial-gradient(circle at center, rgba(255, 179, 33, .22), rgba(5, 3, 10, .6) 55%);
+            animation: found 3s ease-in-out forwards;
+        }}
+        .found-art {{
+            filter: drop-shadow(0 0 14px rgba(255, 179, 33, .95)) drop-shadow(0 0 42px rgba(255, 179, 33, .6));
+            animation: float 3s ease-in-out;
+        }}
+        .found-text {{
+            font-family: 'Chakra Petch', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: .2em;
+            text-transform: uppercase; color: var(--text); text-shadow: 0 0 22px rgba(255, 179, 33, .8);
+            background: var(--glass); padding: 10px 26px; border-left: 3px solid var(--amber); clip-path: var(--chamfer);
+        }}
+        @keyframes found {{
+            0% {{ opacity: 0; transform: scale(.92); }}  12% {{ opacity: 1; transform: scale(1); }}
+            82% {{ opacity: 1; }}  100% {{ opacity: 0; visibility: hidden; }}
+        }}
+        @keyframes float {{ 0% {{ transform: translateY(14px) rotate(-6deg); }} 100% {{ transform: translateY(0) rotate(0); }} }}
+
         @keyframes pulse {{ 0%, 100% {{ opacity: .2; }} 50% {{ opacity: 1; }} }}
         @keyframes goal {{ 0%, 100% {{ stroke: var(--magenta); }} 50% {{ stroke: transparent; }} }}
         {alarm_css}
@@ -433,6 +474,15 @@ def markdown_to_html(text):
 def show_message(text):
     if text:
         st.markdown(f'<div class="message">{markdown_to_html(text)}</div>', unsafe_allow_html=True)
+
+
+def show_found_item(item):
+    """Leuchtendes Item in der Bildmitte, blendet nach 3 Sekunden von selbst aus (reines CSS)."""
+    art = ITEM_ART.get(item["id"], f'<div style="font-size:7rem">{ITEM_ICONS.get(item["id"], "📦")}</div>')
+    name = item["name"].lower()
+    article = "an" if name[0] in "aeiou" else "a"
+    st.markdown(f'<div class="found"><div class="found-art">{art}</div>'
+                f'<div class="found-text">You found {article} {html.escape(name)}</div></div>', unsafe_allow_html=True)
 
 
 @st.fragment(run_every=1)
@@ -541,7 +591,8 @@ def puzzle_dialog(puzzle_id):
         if new_player == player:
             st.markdown(f'<div class="denied">✖ {html.escape(message)}</div>', unsafe_allow_html=True)
         else:
-            apply(new_player, message)
+            apply(new_player, "")  # kein Meldungsfeld – stattdessen die große Einblendung
+            st.session_state.found_item = world["puzzles"][puzzle_id]["reward_item_id"]
             st.rerun()
 
 
@@ -773,6 +824,9 @@ def game_screen(world):
         st.rerun()
 
     show_message(st.session_state.message)
+    found = st.session_state.pop("found_item", None)  # nur einmal zeigen
+    if found:
+        show_found_item(world["items"][found])
     minimap(world, player)
 
 
