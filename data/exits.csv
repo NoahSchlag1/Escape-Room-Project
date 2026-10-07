@@ -1,6 +1,6 @@
 from_room_id,to_room_id,label,blocker_id
-flur,crew,Tür zum Crew-Quartier,defekte_tuer
-crew,flur,Zurück in den Flur,
-crew,labor,Sicherheitsschott zum Labor,schott
-labor,crew,Zurück ins Crew-Quartier,
-labor,ende_gerettet,Sauerstoffgenerator reparieren,generator_schaden
+flur,crew,Door to the crew quarters,defekte_tuer
+crew,flur,Back to the corridor,
+crew,labor,Security bulkhead to the lab,schott
+labor,crew,Back to the crew quarters,
+labor,ende_gerettet,Repair the oxygen generator,generator_schaden

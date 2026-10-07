@@ -1,0 +1,12 @@
+# Dunkles Sci-Fi-Farbschema für alle Streamlit-Elemente (auch Pop-ups und Eingabefelder)
+[theme]
+base = "dark"
+primaryColor = "#3fb6ff"
+backgroundColor = "#04070d"
+secondaryBackgroundColor = "#0f2033"
+textColor = "#d6ecff"
+borderColor = "#24506f"
+
+[client]
+toolbarMode = "minimal"
+showSidebarNavigation = false

@@ -32,7 +32,7 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
 ### Raum 2: Crew-Quartier
 - Schlafkojen, persönliche Gegenstände der Crew, Aufenthaltsbereich.
 - **Objekte zum Ansehen:** Crew-Foto, Bullauge (der Zielplanet ist näher gekommen), persönliches Tagebuch (Eintrag über die Kreaturen), Kaffeemaschine (Ablenkung mit witzigem Text).
-- **Rätsel „Stromkreis verbinden“:** 4 farbige Kabel (rot, blau, gelb, grün) müssen den richtigen 4 Buchsen zugeordnet werden. Die richtige Zuordnung steht auf einer **Notiz an einer Koje**. Ist alles richtig verbunden, springt ein Fach auf. Darin liegt die **Zugangskarte**.
+- **Rätsel „Stromkreis verbinden“:** Die **Notiz an der Koje** öffnet ein Pop-up mit einem gezeichneten Kabelplan: vier Anschlüsse im 2×2-Raster (1 2 / 3 4), in jedem steckt ein farbiges Kabel. Am Wandpanel sieht man dieselben Anschlüsse und wählt pro Anschluss die Kabelfarbe. Stimmt alles, springt ein Fach auf. Darin liegt die **Zugangskarte**.
 - **Sicherheitsschott** zu Raum 3. Es ist verriegelt und braucht die Zugangskarte.
 
 ### Raum 3: Labor (mit Sauerstoffgenerator)

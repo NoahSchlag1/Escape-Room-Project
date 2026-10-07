@@ -1,21 +1,21 @@
-id,room_id,label,x,y,w,h,text,done_text,item_id,puzzle_id,to_room_id
-fenster,flur,Fenster,35,6,32,46,Der rote Zielplanet füllt fast das ganze Fenster. Irgendwo dort unten bewegt sich etwas.,,,,
-feuerloescher,flur,Feuerlöscher,12,52,6,27,Ein ganz normaler Feuerlöscher. Gegen fehlenden Sauerstoff hilft er leider nicht.,,,,
-wandfach,flur,Wandfach,61,58,11,20,Du öffnest das Wandfach. Darin liegt ein Logbuch.,Das Wandfach ist leer.,logbuch,,
-schraubenzieher,flur,Etwas am Boden,45.5,85,8.5,7,Unter dem Fenster liegt ein kleiner Schraubenzieher mit seltsamer Spitze.,Hier lag der Schraubenzieher.,schraubenzieher,,
-spind,flur,Spind,20,25,12,61,,Der Spind steht offen und ist leer.,,spind,
-tuer_crew,flur,Tür,81,14,19,82,,,,,crew
-notiz,crew,Notiz an der Koje,20.5,38,5,12,Ein zerknitterter Zettel: »Kabelplan für Buchse 1–4: Rot zuerst. Blau ganz zuletzt. Gelb steckt direkt vor Grün.«,,,,
-kabelpanel,crew,Wandpanel,40,33,19,42,,Das Fach im Panel ist offen und leer.,,kabel,
-crew_foto,crew,Crew-Foto,34.5,15,10,14,"Die Crew vor dem Start, alle lachen. Auf die Rückseite hat jemand »Bis zum roten Planeten!« geschrieben.",,,,
-bullauge,crew,Bullauge,58.5,11,13,23,Der Planet ist schon wieder ein Stück näher gekommen.,,,,
-tagebuch,crew,Tagebuch,17.5,73,8,7,»Tag 212: Auf den Teleskopbildern bewegen sich Kreaturen mit sechs Beinen. Niemand hier unten glaubt mir.«,,,,
-kaffeemaschine,crew,Kaffeemaschine,67,43,9.5,20,Die Kaffeemaschine zeigt: »Bitte entkalken.« Wirklich jetzt?,,,,
-becher,crew,Umgekippter Becher,57,86,5,8,"Ein umgekippter Kaffeebecher. Wer auch immer hier war, hatte es sehr eilig.",,,,
-tuer_flur,crew,Tür zum Flur,0,8,12,86,,,,,flur
-schott,crew,Sicherheitsschott,80.5,10,19.5,88,,,,,labor
-tanks,labor,Glastanks,14.5,25,30,66,In grünlicher Flüssigkeit schweben Kreaturen mit sechs Beinen. Eine scheint dich anzusehen.,,,,
-riss,labor,Riss in der Wand,48.5,3,22,60,Hier hat der Meteorit die Außenwand aufgerissen. Ein Notfall-Schaumpflaster hält den Riss gerade so dicht.,,,,
-generator,labor,Sauerstoffgenerator,71.5,31,26,53,,,,,ende_gerettet
-werkzeug,labor,Schraubenschlüssel,53.5,87,11,8,Zwei Schraubenschlüssel. Für die sternförmigen Schrauben am Generator sind sie leider nutzlos.,,,,
-tuer_crew_zurueck,labor,Zurück,0,8,12.5,86,,,,,crew
+id,room_id,label,x,y,w,h,text,done_text,item_id,puzzle_id,to_room_id,popup
+fenster,flur,Window,35,6,32,46,"The red planet fills almost the entire window. Canyons, dunes, endless red.",,,,,
+feuerloescher,flur,Fire extinguisher,12,52,6,27,"An ordinary fire extinguisher. Sadly, it won't help against a lack of oxygen.",,,,,
+wandfach,flur,Wall compartment,61,58,11,20,You open the wall compartment. Inside lies a logbook.,The wall compartment is empty.,logbuch,,,
+schraubenzieher,flur,Something on the floor,45.5,85,8.5,7,Below the window lies a small screwdriver with an odd tip.,This is where the screwdriver was.,schraubenzieher,,,
+spind,flur,Locker,20,25,12,61,,The locker is open and empty.,,spind,,
+tuer_crew,flur,Door,81,14,19,82,,,,,crew,
+notiz,crew,Note on the bunk,20.5,38,5,12,A crumpled note pinned to the bunk. Someone sketched the power panel on it.,,,,,cable_note
+kabelpanel,crew,Wall panel,40,33,19,42,,The compartment in the panel is open and empty.,,kabel,,
+crew_foto,crew,Crew photo,34.5,15,10,14,"The crew before launch, everyone laughing. On the back someone wrote: 'See you on the red planet!'",,,,,
+bullauge,crew,Porthole,58.5,11,13,23,The planet has come a little closer again.,,,,,
+tagebuch,crew,Diary,17.5,73,8,7,'Day 212: I can't stop staring at the planet. Only a few more hours and we'll finally walk on red sand.',,,,,
+kaffeemaschine,crew,Coffee machine,67,43,9.5,20,"The coffee machine says: 'PLEASE DESCALE.' Seriously, right now?",,,,,
+becher,crew,Knocked-over mug,57,86,5,8,A knocked-over coffee mug. Whoever was here left in a big hurry.,,,,,
+tuer_flur,crew,Door to the corridor,0,8,12,86,,,,,flur,
+schott,crew,Security bulkhead,80.5,10,19.5,88,,,,,labor,
+tanks,labor,Glass tanks,14.5,25,30,66,Samples from the planet float in greenish liquid. The crew collected them from orbit.,,,,,
+riss,labor,Crack in the wall,48.5,3,22,60,This is where the meteorite tore the hull open. Emergency foam is only just holding it shut.,,,,,
+generator,labor,Oxygen generator,71.5,31,26,53,,,,,ende_gerettet,
+werkzeug,labor,Wrenches,53.5,87,11,8,Two wrenches. Useless for the star-shaped screws on the generator.,,,,,
+tuer_crew_zurueck,labor,Back,0,8,12.5,86,,,,,crew,

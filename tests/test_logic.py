@@ -37,7 +37,7 @@ WINNING_PATH = [
     ("take", "schraubenzieher"),
     ("solve", "spind", "1973"),
     ("go", "crew"),
-    ("solve", "kabel", "rot,gelb,gruen,blau"),
+    ("solve", "kabel", "red,yellow,green,blue"),
     ("go", "labor"),
     ("go", "ende_gerettet"),
 ]
@@ -83,7 +83,7 @@ def test_a3_puzzle_reward_only_once(world):
     player = play(world, logic.new_game(), ("solve", "spind", "1973"))
     again, message = logic.solve_puzzle(world, player, "spind", "1973")
     assert again["inventory"].count("brechstange") == 1
-    assert message == "Das hast du schon gelöst."
+    assert message == "You have already solved that."
 
 
 def test_cannot_take_item_from_other_room(world):
@@ -103,7 +103,7 @@ def test_wrong_code_changes_nothing(world):
 
 def test_cable_answer_is_normalized(world):
     player = play(world, logic.new_game(), ("solve", "spind", "1973"), ("go", "crew"))
-    player, _ = logic.solve_puzzle(world, player, "kabel", "Rot, Gelb, Grün, Blau")
+    player, _ = logic.solve_puzzle(world, player, "kabel", "Red, Yellow, Green, Blue")
     assert "zugangskarte" in player["inventory"]
 
 
@@ -113,7 +113,7 @@ def test_generator_needs_screwdriver(world):
     assert player["current_room_id"] == "labor"
     new_player, message = logic.move(world, player, "ende_gerettet")
     assert new_player == player
-    assert "Flur" in message
+    assert "corridor" in message
 
 
 # ---------- A4: Fortsetzen ----------
@@ -177,7 +177,7 @@ def test_hotspot_opens_puzzle_then_shows_done_text(world):
     player = play(world, player, ("solve", "spind", "1973"))
     _, message, puzzle_id = logic.click_hotspot(world, player, "spind")
     assert puzzle_id is None
-    assert message == "Der Spind steht offen und ist leer."
+    assert message == "The locker is open and empty."
 
 
 def test_world_references_are_consistent(world):
@@ -196,3 +196,12 @@ def test_world_references_are_consistent(world):
         assert h["room_id"] in rooms
         if h["to_room_id"]:
             assert logic.find_exit(world, h["room_id"], h["to_room_id"]) is not None
+
+
+def test_every_csv_row_has_all_columns():
+    """Fängt Zeilen ab, die durch ein Komma ohne Anführungszeichen zerbrochen sind."""
+    import csv
+    for path in db.DATA_DIR.glob("*.csv"):
+        with open(path, newline="", encoding="utf-8") as f:
+            rows = list(csv.reader(f))
+        assert all(len(row) == len(rows[0]) for row in rows), path.name

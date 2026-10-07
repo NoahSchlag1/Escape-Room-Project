@@ -163,6 +163,7 @@ Ein Hotspot ist eine klickbare Fläche im Szenenbild. Er entscheidet nichts selb
 | `item_id` | Klick hebt dieses Item auf | `"logbuch"` |
 | `puzzle_id` | Klick öffnet dieses Puzzle | |
 | `to_room_id` | Klick nimmt den Weg in diesen Raum (inkl. Blocker-Prüfung) | |
+| `popup` | Besonderes Pop-up der Oberfläche, z. B. `cable_note` (Notiz mit Kabelplan) | |
 
 Höchstens eine der letzten drei Spalten ist gefüllt. Sind alle leer, zeigt der Hotspot nur Text an (Fenster, Feuerlöscher …).
 

@@ -82,7 +82,7 @@ def is_playing(player):
     return player["status"] == "playing"
 
 
-GAME_OVER_TEXT = "Das Spiel ist vorbei. Starte ein neues Spiel."
+GAME_OVER_TEXT = "The game is over. Start a new game."
 
 
 # ---------- Aktionen ----------
@@ -93,13 +93,13 @@ def pick_up(world, player, item_id):
         return player, GAME_OVER_TEXT
     item = world["items"][item_id]
     if item_id in player["inventory"]:
-        return player, f"Du hast {item['name']} schon."
+        return player, f"You already have the {item['name']}."
     if item_id not in items_in_room(world, player, player["current_room_id"]):
-        return player, f"{item['name']} ist nicht hier."
+        return player, f"The {item['name']} isn't here."
 
     new_player = copy.deepcopy(player)
     new_player["inventory"].append(item_id)
-    return new_player, f"Du nimmst {item['name']}."
+    return new_player, f"You take the {item['name']}."
 
 
 def move(world, player, to_room_id):
@@ -108,7 +108,7 @@ def move(world, player, to_room_id):
         return player, GAME_OVER_TEXT
     exit = find_exit(world, player["current_room_id"], to_room_id)
     if exit is None:
-        return player, "Von hier aus führt kein Weg dorthin."
+        return player, "There is no way there from here."
 
     new_player = copy.deepcopy(player)
     message = ""
@@ -134,9 +134,9 @@ def solve_puzzle(world, player, puzzle_id, answer):
         return player, GAME_OVER_TEXT
     puzzle = world["puzzles"][puzzle_id]
     if puzzle["room_id"] != player["current_room_id"]:
-        return player, "Dieses Rätsel ist nicht hier."
+        return player, "That puzzle isn't here."
     if is_puzzle_solved(world, player, puzzle_id):
-        return player, "Das hast du schon gelöst."
+        return player, "You have already solved that."
     if normalize(answer) != normalize(puzzle["solution"]):
         return player, puzzle["wrong_text"]
 
@@ -146,7 +146,7 @@ def solve_puzzle(world, player, puzzle_id, answer):
 
 
 def normalize(answer):
-    """'Rot, Gelb ,grün' und 'rot,gelb,gruen' sollen gleich zählen."""
+    """'Red, Yellow ,green' und 'red,yellow,green' sollen gleich zählen."""
     text = str(answer).lower().replace(" ", "")
     return text.replace("ä", "ae").replace("ö", "oe").replace("ü", "ue")
 
@@ -175,7 +175,7 @@ def click_hotspot(world, player, hotspot_id):
         return player, GAME_OVER_TEXT, None
     hotspot = next(h for h in world["hotspots"] if h["id"] == hotspot_id)
     if hotspot["room_id"] != player["current_room_id"]:
-        return player, "Das ist nicht hier.", None
+        return player, "That isn't here.", None
 
     if hotspot["item_id"]:
         if hotspot["item_id"] in player["inventory"]:

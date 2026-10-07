@@ -1,5 +1,13 @@
-id,name,description,start_room_id
-logbuch,Logbuch,Logbuch des Raumschiffs. Auf der ersten Seite steht in krakeliger Schrift: »Baujahr unseres Schiffs: 1973 – möge sie uns sicher zum roten Planeten bringen.«,flur
-schraubenzieher,Spezial-Schraubenzieher,Ein Schraubenzieher mit sternförmiger Spitze. Passt nicht auf normale Schrauben.,flur
-brechstange,Brechstange,"Schwer, kalt, leicht verbogen.",
-zugangskarte,Zugangskarte,Eine Keycard mit der Aufschrift »LABOR – nur autorisiertes Personal«.,
+id,name,description,start_room_id,read_text
+logbuch,Logbook,"The captain's logbook, full of handwritten entries.",flur,"Captain's Log – Day 212
+
+We are close now. The red planet fills the forward window, and none of us can sleep.
+
+The old girl is holding up better than anyone expected – not bad for a ship that first left the hangar in 1973. She's older than half her crew!
+
+The engineers still use her birth year for everything: lockers, panels, even the coffee machine. One day someone will steal our biscuits.
+
+– Cpt. M. Reyes"
+schraubenzieher,Special Screwdriver,A screwdriver with a star-shaped tip. Useless on ordinary screws.,flur,
+brechstange,Crowbar,"Heavy, cold, slightly bent.",,
+zugangskarte,Access Card,A keycard labelled 'LAB – authorised personnel only'.,,
