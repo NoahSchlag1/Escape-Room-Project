@@ -217,3 +217,11 @@ def test_hotspot_changes_follow_player_state(world):
     changed = {h["id"] for h in world["hotspots"] if logic.is_hotspot_changed(world, player, h)}
     assert changed == {"wandfach", "spind", "tuer_crew"}   # Schraubenzieher liegt noch da
     assert not logic.is_hotspot_changed(world, player, spots["fenster"])
+
+
+def test_room_images_exist_with_exact_names(world):
+    """Dateinamen müssen exakt stimmen – auch Groß-/Kleinschreibung (der Mac verzeiht das, Linux nicht)."""
+    files = {path.name for path in (db.DATA_DIR.parent / "images").iterdir()}
+    for room in world["rooms"].values():
+        for key in ("image", "image_after"):
+            assert not room[key] or room[key] in files, f"{room['id']}: {room[key]} fehlt in images/"

@@ -1,12 +1,12 @@
 id,room_id,label,x,y,w,h,text,done_text,item_id,puzzle_id,to_room_id,popup
 fenster,flur,Window,35,6,32,46,"The red planet fills almost the entire window. Canyons, dunes, endless red.",,,,,
 feuerloescher,flur,Fire extinguisher,12,52,6,27,"An ordinary fire extinguisher. Sadly, it won't help against a lack of oxygen.",,,,,
-wandfach,flur,Wall compartment,61,58,11,20,You open the wall compartment. Inside lies a logbook.,The wall compartment is empty.,logbuch,,,
+wandfach,flur,Wall compartment,55,57,17,25,You open the wall compartment. Inside lies a logbook.,The wall compartment is empty.,logbuch,,,
 schraubenzieher,flur,Something on the floor,45.5,85,8.5,7,Below the window lies a small screwdriver with an odd tip.,This is where the screwdriver was.,schraubenzieher,,,
-spind,flur,Locker,20,25,12,61,,The locker is open and empty.,,spind,,
-tuer_crew,flur,Door,81,14,19,82,,,,,crew,
+spind,flur,Locker,17,23,15,64,,The locker is open and empty.,,spind,,
+tuer_crew,flur,Door,78,11,22,86,,,,,crew,
 notiz,crew,Note on the bunk,20.5,38,5,12,A crumpled note pinned to the bunk. Someone sketched the power panel on it.,,,,,cable_note
-kabelpanel,crew,Wall panel,40,33,19,42,,The compartment in the panel is open and empty.,,kabel,,
+kabelpanel,crew,Wall panel,40,33,19,50,,The compartment in the panel is open and empty.,,kabel,,
 crew_foto,crew,Crew photo,34.5,15,10,14,"The crew before launch, everyone laughing. On the back someone wrote: 'See you on the red planet!'",,,,,
 bullauge,crew,Porthole,58.5,11,13,23,The planet has come a little closer again.,,,,,
 tagebuch,crew,Diary,17.5,73,8,7,'Day 212: I can't stop staring at the planet. Only a few more hours and we'll finally walk on red sand.',,,,,

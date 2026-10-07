@@ -8,8 +8,8 @@ Das Spiel nimmt aus dem Danach-Bild nur den Bereich des Objekts, das sich gerade
 
 | Raum | Grundbild (gibt es schon) | Neues Danach-Bild |
 |---|---|---|
-| Flur | `Flur.jpeg` | **`Flur after.jpeg`** |
-| Crew-Quartier | `Crew Cabin.jpeg` | **`Crew Cabin after.jpeg`** |
+| Flur | `Flur before.jpeg` | **`Flur after.jpeg`** |
+| Crew-Quartier | `Cabin Crew before.jpeg` | **`Cabin crew after.jpeg`** |
 | Labor | `Laboratory.jpeg` | nicht nötig: Sobald der Generator repariert ist, beginnt das Outro |
 
 Du musst also nur **2 Bilder** erzeugen.
@@ -38,25 +38,9 @@ Du musst also nur **2 Bilder** erzeugen.
 
 ---
 
-## Prompt: `Flur after.jpeg`
+## Prompts
 
-*(Grundbild `Flur.jpeg` hochladen)*
-
-> Edit this image. Change ONLY the following four things and keep everything else exactly the same – same camera angle, framing, lighting, colors, style and every other object in the same position:
-> 1. The small wall compartment on the right side of the cylindrical tank below the window: its hatch is now open, the compartment inside is empty.
-> 2. The screwdriver on the floor below the window is gone; the floor there is empty.
-> 3. The tall locker on the left: its door is now swung open and the locker is empty inside; the small keypad on it glows green.
-> 4. The broken sliding door on the far right: it has been forced open with a crowbar, now wide enough to walk through; you can see a dimly lit room behind it. The sparking control panel next to it stays.
-> No text, no letters, no watermark.
-
-## Prompt: `Crew Cabin after.jpeg`
-
-*(Grundbild `Crew Cabin.jpeg` hochladen)*
-
-> Edit this image. Change ONLY the following two things and keep everything else exactly the same – same camera angle, framing, lighting, colors, style and every other object in the same position:
-> 1. The open electrical wall panel in the center: the four cables are now plugged in – red into socket 1, yellow into socket 2, green into socket 3, blue into socket 4 – and a small compartment in the panel below the sockets is open and empty.
-> 2. The heavy security bulkhead on the far right: it has slid open, and you can see a softly lit laboratory behind it; the card reader next to it glows green.
-> No text, no letters, no watermark.
+Die beiden Prompts stehen in [PROMPTS.md](PROMPTS.md) im Abschnitt „Danach-Bilder“.
 
 ---
 
