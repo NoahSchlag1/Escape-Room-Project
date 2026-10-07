@@ -4,7 +4,7 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
 
 ## Setting
 
-- Die Menschheit auf der Erde ist durch eine weltweite Apokalypse ausgestorben (Kriege, Klimakollaps, tote Ozeane). Nur eine kleine Crew ist mit einem **Raumschiff von 2073** entkommen.
+- Die Menschheit auf der Erde ist durch eine weltweite Apokalypse ausgestorben (Kriege, Klimakollaps, tote Ozeane). Nur eine kleine Crew ist mit einem **Raumschiff** entkommen. Das Baujahr (2073) wird bewusst nur im Logbuch genannt, weil es der Code für den Spind ist.
 - Ihre Mission: einen Planeten finden, auf dem Menschen überleben können. Nach 212 Tagen haben die Scanner einen gefunden: einen roten Wüstenplaneten mit Wasser unter der Oberfläche und atembarer Luft.
 - Ein Meteorit hat das Schiff gestreift und dabei den **Sauerstoffgenerator** beschädigt, zwei Räume vom Flur entfernt. Wenn er nicht repariert wird, geht die Luft aus.
 - Timer: **10 Minuten**. Der Wert wird durch Testspielen angepasst.

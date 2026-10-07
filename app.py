@@ -26,7 +26,7 @@ FONT_FILES = ["Arial.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf", "Deja
 INTRO_SLIDES = [
     ("Intro 1.jpeg", "Earth has fallen silent. A worldwide apocalypse – endless wars, a collapsing climate, "
                      "oceans that stopped giving life – wiped out humanity on its home planet. "
-                     "Only a small crew escaped in time, aboard a ship built in 2073."),
+                     "Only a small crew escaped in time, aboard a single ship."),
     ("Intro 2.jpeg", "Your mission: find a new world where humans can survive. After 212 days in deep space, "
                      "the scanners finally picked one up – a red desert planet with water beneath its surface "
                      "and air that can be breathed. In a few hours, you will be the first humans to land."),
