@@ -142,7 +142,7 @@ def load_image(filename, title):
 
 @st.cache_data(show_spinner=False)
 def scene_image(filename, title, markers, image_mtime=0):
-    """Szenenbild mit einem leuchtenden Kreis auf jedem klickbaren Objekt.
+    """Szenenbild mit einem leuchtenden Sechseck auf jedem klickbaren Objekt.
 
     markers: Tupel aus (x, y, w, h) in Prozent – nur Hotspots, die noch etwas tun.
     """
@@ -150,13 +150,19 @@ def scene_image(filename, title, markers, image_mtime=0):
     overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
     width, height = image.size
-    r = width / 90  # Kreisgröße passt sich der Bildbreite an
+    r = width / 85  # Größe passt sich der Bildbreite an
+
+    def hexagon(cx, cy, radius):
+        return [(cx + radius * math.cos(math.radians(60 * i)), cy + radius * math.sin(math.radians(60 * i)))
+                for i in range(6)]
+
     for x, y, w, h in markers:
         cx, cy = (x + w / 2) / 100 * width, (y + h / 2) / 100 * height
-        draw.ellipse((cx - r * 1.7, cy - r * 1.7, cx + r * 1.7, cy + r * 1.7), fill=(63, 182, 255, 45))
-        draw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(6, 18, 32, 150), outline=(150, 225, 255, 240),
-                     width=max(2, int(r / 5)))
-        draw.ellipse((cx - r / 3, cy - r / 3, cx + r / 3, cy + r / 3), fill=(200, 242, 255, 255))
+        draw.polygon(hexagon(cx, cy, r * 1.8), fill=(255, 179, 33, 40))                       # Schein
+        draw.polygon(hexagon(cx, cy, r), fill=(20, 12, 40, 160), outline=(255, 190, 70, 245),
+                     width=max(2, int(r / 5)))                                                 # Rahmen
+        d = r / 2.6
+        draw.polygon([(cx, cy - d), (cx + d, cy), (cx, cy + d), (cx - d, cy)], fill=(255, 236, 190, 255))  # Raute
     image.paste(overlay, (0, 0), overlay)
     return image
 
@@ -187,21 +193,41 @@ def find_hotspot(hotspots, click):
 # ---------- Bausteine der Oberfläche ----------
 
 def inject_css(alarm=False):
+    """Das komplette Aussehen: holografische Glas-Panels im Stil von No Man's Sky.
+
+    Alle Farben stehen oben als CSS-Variablen, damit man das Design an einer Stelle ändern kann.
+    """
     aspect = IMAGE_SIZE[0] / IMAGE_SIZE[1]
     alarm_css = """
         .stApp::after {
             content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999;
-            box-shadow: inset 0 0 160px rgba(255, 30, 30, 0.55);
-            animation: pulse 1.6s ease-in-out infinite;
+            box-shadow: inset 0 0 180px rgba(255, 70, 40, .5);
+            animation: pulse 1.8s ease-in-out infinite;
         }
     """ if alarm else ""
     st.markdown(f"""<style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Caveat:wght@500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Exo+2:wght@400;500&family=Caveat:wght@500&display=swap');
+
+        :root {{
+            --glass: rgba(16, 11, 36, .72);       /* dunkles, leicht violettes Glas */
+            --glass-strong: rgba(20, 13, 44, .94);
+            --line: rgba(255, 255, 255, .18);
+            --amber: #ffb321;                     /* Hauptakzent (wie die Markierungen in NMS) */
+            --amber-deep: #ff7a18;
+            --holo: #2ee6d6;                      /* holografisches Türkis */
+            --magenta: #ff4fa3;
+            --text: #f6f1e7;
+            --muted: #b8b0cf;
+            --danger: #ff4d4d;
+            --cut: 12px;                          /* abgeschrägte Ecken */
+            --chamfer: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+                               calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+        }}
 
         /* Vollbild: keine Kopfzeile, keine Seitenleiste, kein Rand */
         header[data-testid="stHeader"], [data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"],
         [data-testid="stToolbar"], [data-testid="stDecoration"], footer {{ display: none !important; }}
-        .stApp {{ background: #000; }}
+        .stApp {{ background: radial-gradient(ellipse at center, #1a0f2e 0%, #05030a 75%); color: var(--text); }}
         [data-testid="stMainBlockContainer"] {{
             padding: 0 !important; margin: 0 auto;
             max-width: min(100vw, calc(100vh * {aspect:.4f})) !important;
@@ -209,101 +235,151 @@ def inject_css(alarm=False):
         [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"] {{ gap: 0; }}
         iframe {{ display: block; }}
 
-        h1, h2, h3, .stButton button {{ font-family: 'Orbitron', sans-serif !important; letter-spacing: .04em; }}
+        html, body, .stApp, p, li, input {{ font-family: 'Exo 2', sans-serif; }}
+        h1, h2, h3, .stButton button, [data-testid="stFormSubmitButton"] button {{
+            font-family: 'Chakra Petch', sans-serif !important; text-transform: uppercase; letter-spacing: .14em;
+        }}
+        h1 {{ font-weight: 700 !important; }}
 
-        /* Anzeige oben rechts: Timer, Inventar, Neustart */
+        /* Glas-Panel mit abgeschrägten Ecken und Akzentkante – Grundlage für alle Anzeigen */
+        .st-key-hud, .room-title, .message, .st-key-caption, .minimap {{
+            background: var(--glass); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--line); clip-path: var(--chamfer); color: var(--text);
+        }}
+
+        /* Buttons: Hauptaktion in Orange, Nebenaktionen als Glas mit Türkis-Rand */
+        [data-testid="stBaseButton-primary"], [data-testid="stBaseButton-primaryFormSubmit"] {{
+            background: linear-gradient(90deg, var(--amber), var(--amber-deep)) !important; color: #1b0d00 !important;
+            border: none !important; border-radius: 0 !important; clip-path: var(--chamfer); font-weight: 700;
+            box-shadow: 0 0 18px rgba(255, 179, 33, .35);
+        }}
+        [data-testid="stBaseButton-primary"]:hover, [data-testid="stBaseButton-primaryFormSubmit"]:hover {{
+            filter: brightness(1.12);
+        }}
+        [data-testid="stBaseButton-secondary"], [data-testid="stButtonGroup"] button {{
+            background: rgba(46, 230, 214, .08) !important; border: 1px solid rgba(46, 230, 214, .55) !important;
+            color: var(--text) !important; border-radius: 0 !important; clip-path: var(--chamfer);
+        }}
+        [data-testid="stBaseButton-secondary"]:hover, [data-testid="stButtonGroup"] button:hover {{
+            background: rgba(46, 230, 214, .2) !important; border-color: var(--holo) !important;
+        }}
+        [data-testid="stButtonGroup"] button[aria-checked="true"], [data-testid="stButtonGroup"] button[kind$="Active"] {{
+            background: rgba(255, 179, 33, .22) !important; border-color: var(--amber) !important;
+        }}
+
+        /* Anzeige oben rechts: Lebenserhaltung, Inventar, Neustart */
         .st-key-hud {{
             position: fixed; top: 14px; right: 14px; z-index: 1001; width: auto !important;
-            background: rgba(4, 10, 20, .8); border: 1px solid #24506f; border-radius: 12px;
-            padding: 6px 10px; backdrop-filter: blur(4px); align-items: center; flex-wrap: nowrap;
+            padding: 8px 12px; align-items: center; flex-wrap: nowrap; gap: 10px !important;
+            border-left: 3px solid var(--holo);
         }}
         .st-key-hud button {{ white-space: nowrap; }}
-        .timer {{ font-family: 'Orbitron', monospace; font-size: 1.6rem; color: #7fd3ff; padding: 0 8px; }}
-        .timer.low {{ color: #ff5050; animation: pulse 1s steps(2) infinite; }}
+        .o2 {{ width: 190px; padding-right: 4px; }}
+        .o2-head {{
+            display: flex; justify-content: space-between; align-items: baseline;
+            font-family: 'Chakra Petch', sans-serif; letter-spacing: .14em; font-size: .7rem; color: var(--muted);
+        }}
+        .o2-time {{ font-size: 1.35rem; letter-spacing: .06em; color: var(--text); font-weight: 600; }}
+        .o2-bar {{ height: 6px; margin-top: 4px; background: rgba(255, 255, 255, .1); }}
+        .o2-bar div {{ height: 100%; box-shadow: 0 0 10px currentColor; transition: width .9s linear; }}
+        .o2.low .o2-time {{ color: var(--danger); animation: pulse 1s steps(2) infinite; }}
 
         .room-title {{
             position: fixed; top: 14px; left: 18px; z-index: 1000; pointer-events: none;
-            font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #d6ecff;
-            background: rgba(4, 10, 20, .75); border: 1px solid #24506f; border-radius: 10px; padding: 6px 14px;
+            padding: 8px 18px 8px 14px; border-left: 3px solid var(--amber);
+        }}
+        .room-title small {{
+            display: block; font-family: 'Chakra Petch', sans-serif; font-size: .65rem; letter-spacing: .25em;
+            color: var(--muted);
+        }}
+        .room-title span {{
+            font-family: 'Chakra Petch', sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: .16em;
+            text-transform: uppercase;
         }}
         .message {{
             position: fixed; left: 18px; bottom: 18px; z-index: 1000; pointer-events: none;
-            max-width: min(46vw, 620px, calc(100vw - 480px)); min-width: 260px; background: rgba(4, 12, 24, .85); border: 1px solid #2c5d80;
-            border-radius: 10px; padding: .9rem 1.1rem; color: #d6ecff; font-size: 1.02rem; line-height: 1.45;
+            max-width: min(46vw, 620px, calc(100vw - 480px)); min-width: 260px;
+            border-left: 3px solid var(--holo); padding: .9rem 1.2rem; font-size: 1.02rem; line-height: 1.5;
         }}
+        .message b {{ color: var(--amber); }}
 
         /* Textfeld mit Button unten mittig (Start, Intro, Outro, Ende) */
         .st-key-caption {{
             position: fixed; left: 50%; transform: translateX(-50%); bottom: 28px; z-index: 1001;
-            width: min(760px, 92vw) !important; background: rgba(4, 10, 20, .85); border: 1px solid #24506f;
-            border-radius: 14px; padding: 18px 22px; gap: .8rem !important;
+            width: min(760px, 92vw) !important; padding: 20px 26px; gap: .8rem !important;
+            border-left: 3px solid var(--amber);
         }}
+        .st-key-caption h1 {{ font-size: 2.6rem; letter-spacing: .22em; text-shadow: 0 0 24px rgba(255, 179, 33, .4); }}
 
-        .minimap {{
-            position: fixed; right: 18px; bottom: 18px; z-index: 1000; pointer-events: none;
-            background: rgba(4, 10, 20, .85); border: 1px solid #24506f; border-radius: 10px; padding: 8px;
-        }}
-        .minimap .goal {{ animation: goal 1s ease-in-out infinite; }}
+        .minimap {{ position: fixed; right: 18px; bottom: 18px; z-index: 1000; pointer-events: none; padding: 10px; }}
+        .minimap .goal {{ animation: goal 1.2s ease-in-out infinite; }}
 
-        /* Pop-ups im Spieldesign */
+        /* Pop-ups: großes Hologramm-Panel */
         [role="dialog"] {{  /* Streamlit rendert Pop-ups als <section role="dialog"> */
-            background: linear-gradient(160deg, #0c1a2c, #060d18) !important; color: #d6ecff;
-            border: 1px solid #2c7fb8; box-shadow: 0 0 40px rgba(63, 182, 255, .25);
+            background: linear-gradient(160deg, rgba(34, 18, 66, .97), rgba(8, 24, 42, .97)) !important;
+            color: var(--text); border: 1px solid rgba(46, 230, 214, .45) !important; border-radius: 0 !important;
+            border-top: 3px solid var(--amber) !important; box-shadow: 0 0 60px rgba(46, 230, 214, .18);
         }}
+        [role="dialog"] h2 {{ color: var(--amber); }}
         .slot {{
-            border: 1px solid #2c7fb8; border-radius: 12px; background: rgba(20, 45, 70, .55);
-            padding: 14px 10px; min-height: 190px; text-align: center; margin-bottom: 8px;
+            background: rgba(46, 230, 214, .07); border: 1px solid rgba(46, 230, 214, .45);
+            clip-path: var(--chamfer); padding: 16px 10px; min-height: 190px; text-align: center; margin-bottom: 8px;
         }}
-        .slot.empty {{ border-style: dashed; background: rgba(10, 20, 35, .4); color: #4f7390; }}
-        .slot .icon {{ font-size: 2.6rem; line-height: 1.4; }}
-        .slot .name {{ font-family: 'Orbitron', sans-serif; font-size: .9rem; margin: 4px 0 6px; }}
-        .slot .desc {{ font-size: .85rem; color: #9cc4e0; }}
+        .slot.empty {{ background: rgba(255, 255, 255, .03); border: 1px dashed var(--line); color: var(--muted); }}
+        .slot .icon {{
+            font-size: 2.2rem; width: 70px; height: 62px; margin: 0 auto 6px; display: grid; place-items: center;
+            background: rgba(255, 179, 33, .14);
+            clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);  /* Sechseck */
+        }}
+        .slot.empty .icon {{ background: rgba(255, 255, 255, .05); }}
+        .slot .name {{
+            font-family: 'Chakra Petch', sans-serif; font-size: .85rem; letter-spacing: .12em; text-transform: uppercase;
+            margin: 4px 0 6px;
+        }}
+        .slot .desc {{ font-size: .85rem; color: var(--muted); }}
         .logbook {{
             background: radial-gradient(circle at 30% 20%, #f2e6c9, #dcc89c); color: #2d2216;
             font-family: 'Caveat', cursive; font-size: 1.5rem; line-height: 1.3;
-            padding: 22px 32px; border-radius: 6px; box-shadow: inset 0 0 40px rgba(120, 90, 40, .45);
+            padding: 22px 32px; clip-path: var(--chamfer); box-shadow: inset 0 0 40px rgba(120, 90, 40, .45);
         }}
-
-        /* Rätsel: Metallplatte mit leeren Eingabefeldern statt Auswahlmenüs */
-        .puzzle-prompt {{ font-size: 1.05rem; color: #cfe6f7; margin-bottom: 16px; }}
-        .st-key-lockpad, .st-key-cablepanel {{
-            background: linear-gradient(145deg, #3a4652, #1b232c); border: 2px solid #56636f; border-radius: 16px;
-            padding: 22px 26px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, .08), 0 10px 30px rgba(0, 0, 0, .6);
-        }}
-        .st-key-lockpad [data-testid="stTextInputRootElement"], .st-key-lockpad [data-baseweb="input"] {{
-            height: 84px;
-            background: #041018; border: 2px solid #2c7fb8; border-radius: 10px;
-            box-shadow: inset 0 0 14px rgba(0, 0, 0, .8);
-        }}
-        .st-key-lockpad input {{
-            text-align: center; font-family: 'Orbitron', monospace !important; color: #7dffb0 !important;
-            background: transparent !important; caret-color: #7dffb0;
-        }}
-        .st-key-lockpad input {{ font-size: 2.6rem !important; height: 100% !important; padding: 0 !important; }}
-        [data-testid="InputInstructions"] {{ display: none; }}
-        .panel-head {{
-            font-family: 'Orbitron', sans-serif; font-size: .8rem; letter-spacing: .18em; color: #aebdcb;
-            display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-        }}
-        .led {{ width: 12px; height: 12px; border-radius: 50%; background: #ff3b3b; box-shadow: 0 0 10px #ff3b3b; }}
-        .st-key-cablepanel [data-testid="stWidgetLabel"] p {{
-            font-family: 'Orbitron', sans-serif; font-size: .75rem; letter-spacing: .12em; color: #aebdcb;
-        }}
-        .denied {{ color: #ff6b6b; font-family: 'Orbitron', sans-serif; font-size: .9rem; margin-top: 14px; }}
-
         .logbook p {{ margin: 0 0 .6em; }}
         .logbook p:last-child {{ margin-bottom: 0; }}
 
-        /* Nebenbuttons und Kabel-Knöpfe im Spieldesign statt schwarz */
-        [data-testid="stBaseButton-secondary"], [data-testid="stButtonGroup"] button {{
-            background: #0f2033 !important; border: 1px solid #2c7fb8 !important; color: #d6ecff !important;
+        /* Rätsel: holografische Bedienfelder */
+        .puzzle-prompt {{ font-size: 1.05rem; color: var(--muted); margin-bottom: 16px; }}
+        .st-key-lockpad, .st-key-cablepanel {{
+            background: linear-gradient(160deg, rgba(46, 230, 214, .10), rgba(46, 230, 214, .02));
+            border: 1px solid rgba(46, 230, 214, .5); clip-path: var(--chamfer); padding: 22px 26px;
+            box-shadow: inset 0 0 40px rgba(46, 230, 214, .08);
         }}
-        [data-testid="stBaseButton-secondary"]:hover, [data-testid="stButtonGroup"] button:hover {{
-            border-color: #7fd3ff !important; color: #fff !important;
+        .st-key-lockpad [data-testid="stTextInputRootElement"], .st-key-lockpad [data-baseweb="input"] {{
+            height: 84px; background: rgba(5, 4, 14, .85); border: 1px solid rgba(255, 179, 33, .6);
+            border-radius: 0; clip-path: var(--chamfer); box-shadow: inset 0 0 18px rgba(0, 0, 0, .8);
+        }}
+        .st-key-lockpad input {{
+            text-align: center; font-family: 'Chakra Petch', monospace !important; color: var(--amber) !important;
+            background: transparent !important; caret-color: var(--amber); text-shadow: 0 0 12px rgba(255, 179, 33, .7);
+            font-size: 2.6rem !important; height: 100% !important; padding: 0 !important;
+        }}
+        [data-testid="InputInstructions"] {{ display: none; }}
+        .panel-head {{
+            font-family: 'Chakra Petch', sans-serif; font-size: .78rem; letter-spacing: .22em; color: var(--holo);
+            display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+        }}
+        .led {{
+            width: 10px; height: 10px; background: var(--danger); box-shadow: 0 0 10px var(--danger);
+            transform: rotate(45deg);  /* Raute statt Kreis */
+        }}
+        .st-key-cablepanel [data-testid="stWidgetLabel"] p {{
+            font-family: 'Chakra Petch', sans-serif; font-size: .72rem; letter-spacing: .2em; color: var(--muted);
+        }}
+        .denied {{
+            color: var(--danger); font-family: 'Chakra Petch', sans-serif; letter-spacing: .1em; font-size: .9rem;
+            margin-top: 14px; text-transform: uppercase;
         }}
 
-        @keyframes pulse {{ 0%, 100% {{ opacity: .15; }} 50% {{ opacity: 1; }} }}
-        @keyframes goal {{ 0%, 100% {{ stroke: #ff3030; }} 50% {{ stroke: transparent; }} }}
+        @keyframes pulse {{ 0%, 100% {{ opacity: .2; }} 50% {{ opacity: 1; }} }}
+        @keyframes goal {{ 0%, 100% {{ stroke: var(--magenta); }} 50% {{ stroke: transparent; }} }}
         {alarm_css}
     </style>""", unsafe_allow_html=True)
 
@@ -328,15 +404,20 @@ def timer():
     if not logic.is_playing(player):
         st.rerun()  # ganze Seite neu laden, damit das Ende angezeigt wird
     seconds = player["remaining_seconds"]
-    css = "timer low" if seconds <= 60 else "timer"
-    st.markdown(f'<div class="{css}">🫁 {seconds // 60:02d}:{seconds % 60:02d}</div>', unsafe_allow_html=True)
+    share = seconds / logic.START_SECONDS
+    color = "#2ee6d6" if share > .5 else "#ffb321" if share > .2 else "#ff4d4d"  # Türkis -> Orange -> Rot
+    css = "o2 low" if seconds <= 60 else "o2"
+    st.markdown(f'<div class="{css}"><div class="o2-head"><span>LIFE SUPPORT</span>'
+                f'<span class="o2-time">{seconds // 60:02d}:{seconds % 60:02d}</span></div>'
+                f'<div class="o2-bar"><div style="width:{share * 100:.1f}%; background:{color}; color:{color}"></div>'
+                f'</div></div>', unsafe_allow_html=True)
 
 
 def minimap(world, player):
     """Mini-Map unten rechts: gezeichnet aus den Rooms (Position) und der Map (Wege)."""
     rooms = {rid: r for rid, r in world["rooms"].items() if r["map_x"] != ""}
     goal = logic.goal_room_id(world)
-    box_w, box_h, gap = 100, 44, 36
+    box_w, box_h, gap = 126, 44, 30
 
     def pos(room):
         return 10 + int(room["map_x"]) * (box_w + gap), 10 + int(room["map_y"]) * (box_h + gap)
@@ -354,7 +435,7 @@ def minimap(world, player):
         (ax, ay), (bx, by) = pos(rooms[a]), pos(rooms[b])
         x1, y1, x2, y2 = ax + box_w, ay + box_h / 2, bx, by + box_h / 2
         dash = 'stroke-dasharray="4 4"' if locked else ""
-        color = "#ff6060" if locked else "#5fb3e0"
+        color = "#ff4d4d" if locked else "#2ee6d6"
         parts.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="3" {dash}/>')
         if locked:
             parts.append(f'<text x="{(x1 + x2) / 2}" y="{y1 - 8}" font-size="14" text-anchor="middle">🔒</text>')
@@ -362,15 +443,19 @@ def minimap(world, player):
     for rid, room in rooms.items():
         x, y = pos(room)
         here = rid == player["current_room_id"]
-        fill = "#1f7fb8" if here else "#0d1d33"
+        fill = "rgba(255,179,33,.28)" if here else "rgba(255,255,255,.05)"
         css = 'class="goal"' if rid == goal else ""
-        stroke = "#ff3030" if rid == goal else "#5fb3e0"
-        parts.append(f'<rect {css} x="{x}" y="{y}" width="{box_w}" height="{box_h}" rx="6" '
-                     f'fill="{fill}" stroke="{stroke}" stroke-width="2"/>')
-        parts.append(f'<text x="{x + box_w / 2}" y="{y + box_h / 2 + 5}" font-size="12" fill="#e0f2ff" '
-                     f'text-anchor="middle" font-family="sans-serif">{html.escape(room["name"])}</text>')
+        stroke = "#ff4fa3" if rid == goal else "#ffb321" if here else "rgba(255,255,255,.35)"
+        c = 8  # abgeschrägte Ecken wie bei den Panels
+        corners = (f"{x + c},{y} {x + box_w},{y} {x + box_w},{y + box_h - c} "
+                   f"{x + box_w - c},{y + box_h} {x},{y + box_h} {x},{y + c}")
+        parts.append(f'<polygon {css} points="{corners}" fill="{fill}" stroke="{stroke}" stroke-width="2"/>')
+        parts.append(f'<text x="{x + box_w / 2}" y="{y + box_h / 2 + 4}" font-size="10.5" fill="#f6f1e7" '
+                     f'text-anchor="middle" letter-spacing="1.5" font-family="Chakra Petch, sans-serif">'
+                     f'{html.escape(room["name"].upper())}</text>')
         if here:
-            parts.append(f'<circle cx="{x + box_w - 9}" cy="{y + 9}" r="5" fill="#7dffb0"/>')
+            parts.append(f'<polygon points="{x + box_w - 10},{y + 4} {x + box_w - 5},{y + 9} '
+                         f'{x + box_w - 10},{y + 14} {x + box_w - 15},{y + 9}" fill="#ffb321"/>')
 
     width = 20 + max(int(r["map_x"]) for r in rooms.values()) * (box_w + gap) + box_w
     height = 20 + max(int(r["map_y"]) for r in rooms.values()) * (box_h + gap) + box_h
@@ -382,9 +467,9 @@ def read_aloud_button(text):
     """Kleiner Button, der den Text mit der Sprachausgabe des Browsers vorliest."""
     st.iframe(f"""
         <style>body {{ margin: 0; padding: 2px; }}</style>
-        <button id="speak" style="font-family: sans-serif; font-size: 15px; color: #d6ecff; cursor: pointer;
-            background: #0f2033; border: 1px solid #2c7fb8; border-radius: 8px; padding: 8px 16px;">
-            🔊 Read aloud</button>
+        <button id="speak" style="font-family: sans-serif; font-size: 14px; letter-spacing: 2px; color: #f6f1e7;
+            cursor: pointer; background: rgba(46,230,214,.12); border: 1px solid #2ee6d6; padding: 8px 16px;">
+            🔊 READ ALOUD</button>
         <script>
             const text = {json.dumps(text)};
             document.getElementById("speak").onclick = () => {{
@@ -448,8 +533,8 @@ def sockets_svg(plugged, paper):
     plugged: Liste mit 4 Farben (oder None), je eine pro Anschluss.
     paper:   True = handgezeichnet auf der Notiz, False = Metallpanel im Rätsel.
     """
-    ink = "#3b2f1e" if paper else "#aebdcb"
-    font_family = "Caveat, cursive" if paper else "Orbitron, sans-serif"
+    ink = "#3b2f1e" if paper else "#b8b0cf"
+    font_family = "Caveat, cursive" if paper else "Chakra Petch, sans-serif"
     sockets = [(130, 80), (290, 80), (130, 190), (290, 190)]
     starts = [30, 390, 170, 250]  # wo die Kabel unten herkommen: obere Reihe außen herum, untere innen
     parts = []
@@ -460,9 +545,10 @@ def sockets_svg(plugged, paper):
             parts.append(f'<rect x="{sx - 32}" y="{sy - 32}" width="64" height="64" rx="8" fill="none" '
                          f'stroke="{ink}" stroke-width="2.5" stroke-dasharray="7 3"/>')
         else:
-            parts.append(f'<rect x="{sx - 32}" y="{sy - 32}" width="64" height="64" rx="10" fill="#141b22" '
-                         f'stroke="#56636f" stroke-width="2"/>')
-            parts.append(f'<circle cx="{sx}" cy="{sy}" r="14" fill="#000" stroke="#2b3540" stroke-width="3"/>')
+            parts.append(f'<rect x="{sx - 32}" y="{sy - 32}" width="64" height="64" fill="rgba(5,4,14,.7)" '
+                         f'stroke="#2ee6d6" stroke-opacity=".6" stroke-width="1.5"/>')
+            parts.append(f'<circle cx="{sx}" cy="{sy}" r="14" fill="#000" stroke="#2ee6d6" stroke-opacity=".35" '
+                         f'stroke-width="3"/>')
         if color:
             hex_color = CABLE_COLORS[color]
             x0 = starts[i]
@@ -617,7 +703,8 @@ def game_screen(world):
             st.session_state.open_dialog = ("inventory",)
         if st.button("⟲", key="restart_button", help="New game"):
             st.session_state.open_dialog = ("restart",)
-    st.markdown(f'<div class="room-title">{html.escape(room["name"])}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="room-title"><small>LOCATION</small><span>{html.escape(room["name"])}</span></div>',
+                unsafe_allow_html=True)
 
     path = IMAGE_DIR / room["image"]
     mtime = path.stat().st_mtime if path.exists() else 0

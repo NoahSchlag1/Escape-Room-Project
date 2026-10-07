@@ -1,11 +1,11 @@
-# Dunkles Sci-Fi-Farbschema für alle Streamlit-Elemente (auch Pop-ups und Eingabefelder)
+# Farbschema im Stil von No Man's Sky für alle Streamlit-Elemente (auch Pop-ups und Eingabefelder)
 [theme]
 base = "dark"
-primaryColor = "#3fb6ff"
-backgroundColor = "#04070d"
-secondaryBackgroundColor = "#0f2033"
-textColor = "#d6ecff"
-borderColor = "#24506f"
+primaryColor = "#ffb321"
+backgroundColor = "#07050f"
+secondaryBackgroundColor = "#1a1430"
+textColor = "#f6f1e7"
+borderColor = "#3b3360"
 
 [client]
 toolbarMode = "minimal"
