@@ -45,13 +45,22 @@ ITEM_ICONS = {"logbuch": "📖", "schraubenzieher": "🪛", "brechstange": "🛠
 
 # Große Zeichnungen für die Einblendung „You found …“ (Belohnung eines Rätsels)
 ITEM_ART = {
-    "brechstange": """<svg viewBox="0 0 200 200" width="220" height="220">
-        <path d="M58 166 L140 58" stroke="#5a1a10" stroke-width="22" stroke-linecap="round" fill="none"/>
-        <path d="M58 166 L140 58" stroke="#d2482f" stroke-width="15" stroke-linecap="round" fill="none"/>
-        <path d="M64 154 L134 62" stroke="#ff8a6a" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"/>
-        <path d="M140 58 C150 40 172 36 178 50 C183 62 172 72 160 66" stroke="#cfd6dc" stroke-width="14"
-              stroke-linecap="round" fill="none"/>
-        <path d="M58 166 L36 176 M58 166 L44 186" stroke="#cfd6dc" stroke-width="12" stroke-linecap="round"/>
+    # nachgezeichnet nach der Brechstange im Bild „Flur after.jpeg“: dunkler, abgenutzter Stahl,
+    # oben ein gebogener Haken mit Klaue, unten ein gespaltenes, gespreiztes Ende
+    "brechstange": """<svg viewBox="0 0 200 200" width="230" height="230">
+        <defs><linearGradient id="steel" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6b5d53"/><stop offset=".5" stop-color="#3f3530"/>
+            <stop offset="1" stop-color="#2a221e"/></linearGradient></defs>
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M62 166 L138 58 C144 48 152 42 161 44 C169 46 172 54 167 61"
+                  stroke="#16110e" stroke-width="10"/>
+            <path d="M62 166 L138 58 C144 48 152 42 161 44 C169 46 172 54 167 61"
+                  stroke="url(#steel)" stroke-width="6.5"/>
+            <path d="M66 158 L136 60 C141 52 148 47 156 47" stroke="#c9b8a6" stroke-width="2" opacity=".55"/>
+            <path d="M167 61 L163 68 M167 61 L171 67" stroke="#3f3530" stroke-width="5"/>
+            <path d="M62 166 L47 184 M62 166 L57 189" stroke="#16110e" stroke-width="9"/>
+            <path d="M62 166 L47 184 M62 166 L57 189" stroke="#4a3f38" stroke-width="5.5"/>
+        </g>
     </svg>""",
     "zugangskarte": """<svg viewBox="0 0 200 200" width="220" height="220">
         <rect x="30" y="55" width="140" height="90" rx="12" fill="#10283a" stroke="#2ee6d6" stroke-width="4"/>
