@@ -1,66 +1,66 @@
-# Bild-Prompts für die Szenen (Stil: No Man's Sky)
+# Bild-Prompts: vorhandene Bilder umstylen (No Man's Sky, Baujahr 2073)
+
+Wir erzeugen **keine neuen Motive**. Jedes vorhandene Bild aus `images/` wird nur umgestylt:
+gleicher Inhalt, gleicher Bildaufbau, gleiche Positionen, aber futuristisch statt retro.
+So passen die Klickflächen in `data/hotspots.csv` weiterhin.
 
 Die Prompts sind auf Englisch, weil Bildgeneratoren damit zuverlässiger arbeiten.
 
 ## So gehst du vor
 
-1. Erzeuge alle Bilder **im selben Chat**. Dann bleibt der Stil einheitlich.
-   Fang mit dem Flur an. Bei allen weiteren Bildern schreibst du dazu: *„Same style as the previous image.“*
-2. Wähle das Format **16:9** (z. B. 1376×768 oder 1792×1024).
-3. Speichere jedes Bild **unter genau dem angegebenen Dateinamen** in `images/` und ersetze damit das alte Bild.
-   Dann musst du im Code nichts ändern.
-4. Starte das Spiel und prüfe, ob die leuchtenden Sechsecke auf den richtigen Objekten sitzen.
-   Wenn nicht, passt du `x`, `y`, `w`, `h` in `data/hotspots.csv` an (Prozent der Bildbreite bzw. Bildhöhe).
-   Am einfachsten schickst du mir die neuen Bilder, dann passe ich die Klickflächen an.
+1. Öffne in Gemini einen neuen Chat und **lade das Originalbild hoch** (z. B. `images/Flur.jpeg`).
+2. Schreib den **Umstyle-Prompt** unten und hänge den Teil für dieses Bild an.
+3. Speichere das Ergebnis **unter genau demselben Dateinamen** in `images/` und ersetze damit das alte Bild.
+4. Mach alle Bilder im selben Chat. Ab dem zweiten Bild schreibst du dazu: *„Same style as the previous image.“*
+5. Schick mir danach die neuen Raumbilder (Flur, Crew Cabin, Laboratory). Ich prüfe, ob die Klickflächen noch sitzen.
 
-**Wichtig für die Raumbilder:** Die Objekte sollten ungefähr an denselben Stellen liegen wie bisher, so wie es in den Prompts beschrieben ist.
-Dann bleiben die Klickflächen fast unverändert.
+Verschiebt Gemini Objekte, hilft der Zusatz: *„Do not move, add or remove any objects.“*
 
-## Gemeinsamer Stil (an jeden Prompt anhängen)
+## Umstyle-Prompt (bei jedem Bild verwenden)
 
-> Vibrant painterly sci-fi illustration in the style of No Man's Sky and 1970s science-fiction paperback cover art. Bold, saturated colors: teal, amber orange, magenta and soft pastel sky tones. Clean futuristic surfaces with chunky panel lines, rounded hatches and glowing holographic displays, soft atmospheric haze and light rays, a sense of wonder. Wide 16:9 composition, eye-level view, no people, no text, no letters, no watermark.
+> Restyle this exact image. Keep the composition, camera angle, framing and every object in exactly the same position and size. Only change the visual style: futuristic sci-fi of the year 2073 in the style of No Man's Sky. Replace retro elements (rivets, CRT monitors, chunky toggle switches, beige riveted metal) with sleek, smooth composite surfaces, seamless rounded panels, slim glowing holographic displays and thin light strips. Muted, dusty color palette of rust red, ochre and burnt orange with small desaturated teal accents; no bright pink or neon colors. Hazy atmosphere, soft volumetric light, painterly concept-art rendering. No text, no letters, no watermark.
 
 ---
 
-## Intro
+## Intro (im Weltall)
 
-**`Intro 1.jpeg`**: Der Zielplanet in Nahaufnahme
-> Close-up of a huge alien planet seen from orbit: a saturated red-orange surface like Mars with deep canyons and dunes, a glowing pastel pink-and-teal atmosphere at the horizon, a thin planetary ring and two small moons in a colorful nebula sky. Awe-inspiring, mysterious mood. + Stil
+**`Intro 1.jpeg`**: Blick aus dem Cockpit auf den Planeten
+> Keep: the cockpit interior with its three large front windows, the consoles in front and on the sides, and the pilot seat on the right. Through the windows the red planet with canyons and dunes, seen from high orbit. Turn the consoles into sleek 2073 controls with holographic screens. Remove the small creatures on the dunes.
 
-**`Intro 2.jpeg`**: Das Schiff auf dem Weg dorthin
-> A sleek retro-futuristic spaceship with bold orange and white hull panels flying through a colorful nebula toward the large red ringed planet, which fills the right half of the image. The engines glow bright teal. Calm before the storm. + Stil
+**`Intro 2.jpeg`**: Das Schiff fliegt auf den Planeten zu
+> Keep: the spaceship in the center seen from behind, flying toward the planet, three glowing engines on the left side, the curved red planet filling the right half, black space with stars and distant galaxies on the left. Make the ship a sleek 2073 design with a smooth hull, no rivets and no old screens, keeping its shape and position. Turn the bright pink atmosphere glow into a thin dusty orange haze.
 
 **`Intro 3.jpeg`**: Der Meteorit streift das Schiff
-> A glowing meteorite grazing along the side of the orange-and-white spaceship, not a direct hit but a glancing blow: it scrapes across the hull leaving a long torn gash, a bright trail of sparks and metal fragments, a thin white plume of escaping air. The meteorite continues past the ship. The red ringed planet and a colorful nebula in the background. Dramatic, frozen-moment mood. + Stil
+> Keep: the same spaceship and planet as before, the meteorite on the right scraping along the side of the hull, the torn gash with orange sparks flying to the left and the white plume of escaping air. Make the ship the same sleek 2073 design as in the previous image. Turn the bright pink atmosphere glow into a thin dusty orange haze.
 
 ---
 
-## Räume (mit Klickflächen)
+## Räume (mit Klickflächen – Positionen auf keinen Fall verändern)
 
 **`Flur.jpeg`**: Flur
-> Interior of a futuristic spaceship corridor, front view of one wall. In the upper center a large rectangular window showing the huge red ringed planet. On the left side a tall narrow locker with a small glowing 4-digit keypad lock; further left and lower, a red fire extinguisher mounted on the wall. To the right of the window, at mid height, a small closed wall compartment with a latch. On the far right edge a heavy sliding automatic door, stuck slightly open, with sparks from a broken control panel. On the floor below the window, small and easy to overlook, a screwdriver with a star-shaped tip. Pulsing red-orange emergency lights. + Stil
+> Keep exactly in place: the large window in the upper center with the red planet, the tall locker with the small keypad on the left, the red fire extinguisher on the far left wall, the cylindrical tank below the window with the small wall compartment and latch on its right side, the screwdriver on the floor below the window, the broken sliding door on the right with the sparking control panel, and the red emergency lights on the ceiling.
 
 **`Crew Cabin.jpeg`**: Crew-Quartier
-> Crew quarters on a futuristic spaceship, front view of one wall. On the far left edge an open sliding door back to the corridor. Left of center a bunk bed with a crumpled paper note pinned to it, and below it a small shelf with a personal diary. Upper left center a framed photo on the wall; upper right center a round porthole showing the red ringed planet. In the exact center an open electrical wall panel with four numbered sockets (1 and 2 on top, 3 and 4 below) and four loose cables in red, yellow, green and blue. Right of center a small coffee machine on a counter. On the far right edge a heavy locked security bulkhead with a card reader glowing red. A knocked-over mug on the floor. Cool teal ambient light with warm amber accents. + Stil
+> Keep exactly in place: the open door on the left, the framed crew photo on the wall, the bunk bed with the paper note pinned to it, the diary on the small shelf below the bed, the open wall panel in the center with four numbered sockets and the red, yellow, green and blue cables, the round porthole with the red planet, the coffee machine on the small table, the knocked-over mug on the floor, and the locked bulkhead on the right with the red glowing card reader.
 
 **`Laboratory.jpeg`**: Labor mit Generator
-> Research laboratory on a futuristic spaceship, front view. On the left several tall glowing glass tanks with colorful plant and rock samples from the planet floating in liquid. In the upper center a jagged crack in the wall, patched with glowing emergency foam. On the right a large bulky oxygen generator machine, damaged and smoking, its cover panel held by star-shaped special screws, warning lights blinking. On the floor in front, two ordinary wrenches. On the far left edge the open bulkhead door leading back. Haze in the air, teal and magenta light. + Stil
+> Keep exactly in place: the open door on the left, the three glowing green glass tanks, the crack in the wall in the upper center with the foam patch and the red warning light, the small computer terminal, the damaged smoking oxygen generator on the right with its loose cover panel, and the two wrenches on the floor. Optional: replace the creatures in the tanks with rock and plant samples.
 
 ---
 
-## Enden und Outro
+## Outro und Enden
 
 **`Outro 1.jpeg`**: Eintritt in die Atmosphäre
-> The orange-and-white spaceship entering the atmosphere of the red planet, glowing heat shield and bright trails, a pastel pink sky, the planetary ring arching overhead, red dunes and canyons far below. Triumphant mood. + Stil
+> Keep: the spaceship in the center wrapped in flames as it enters the atmosphere, the fiery trail behind it, the red desert with canyons below and the dark sky above. Make the ship the same sleek 2073 design as in the intro.
 
-**`Outro 2.jpeg`**: Gelandet
-> View through a spaceship window onto the surface of the red planet after landing: rolling red dunes, giant crystalline rock arches, strange glowing flora, a pastel sky with the planetary ring and two moons. Hopeful, wondrous mood. + Stil
+**`Outro 2.jpeg`**: Das Schiff über dem Planeten
+> Keep: the spaceship on the left seen from behind with its three glowing engines, the curved red planet with canyons on the right, black space with stars. Make the ship the same sleek 2073 design as in the intro. Turn the bright pink atmosphere glow into a thin dusty orange haze.
 
 **`Outro saved.jpeg`**: Endbildschirm „Saved“
-> The spaceship standing safely on the red planet at sunset, landing legs extended, warm light from its windows, crystalline rock arches and the planetary ring glowing in a magenta-and-orange sky. Peaceful, victorious mood. + Stil
+> Keep: the landed spaceship on its legs in the center right, the tall rock spires on the left, the sunset sky with two small moons, the red desert in the foreground. Make the ship the same sleek 2073 design as in the intro. Optional: remove the small creatures in the foreground.
 
 **`Outro Out of oxygen.jpeg`**: Endbildschirm „Out of Air“
-> The spaceship corridor in darkness, only a single red emergency light, frost creeping over the window, the red planet outside unreachable, a holographic warning display showing a flat oxygen line. Quiet, melancholic, game-over mood. + Stil
+> Keep: the dark corridor in central perspective, the frosted windows on both sides with ice, the red ceiling light, the window at the end with the planet, the two small warning screens on the left wall showing a flat oxygen line and a warning sign. Turn the screens into slim holographic displays.
 
 ---
 
