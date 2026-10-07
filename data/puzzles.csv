@@ -1,3 +1,3 @@
 id,room_id,name,kind,prompt,solution,reward_item_id,solved_text,wrong_text
-spind,flur,Locker with combination lock,code,A four-digit combination lock. Someone has scratched into the paint: 'Same as always – her birth year.',1973,brechstange,Click! The locker swings open. Inside: a crowbar.,The lock beeps red. Wrong code.
+spind,flur,Locker with combination lock,code,A four-digit combination lock. Someone has scratched into the paint: 'Same as always – her birth year.',2073,brechstange,Click! The locker swings open. Inside: a crowbar.,The lock beeps red. Wrong code.
 kabel,crew,Power circuit,cables,An open wall panel with four sockets and four loose cables. Plug the right cable into each socket.,"red,yellow,green,blue",zugangskarte,"Sparks, a hum – a compartment pops open. Inside lies an access card.","A brief crackle, then nothing. The order is wrong."

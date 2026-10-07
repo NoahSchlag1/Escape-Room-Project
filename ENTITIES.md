@@ -134,7 +134,7 @@ Gelöste Puzzles werden **nicht** extra gespeichert. Jedes Puzzle gibt genau ein
 | `name` | Anzeigename | `"Spind mit Zahlenschloss"` |
 | `kind` | Welche Eingabe angezeigt wird: `code` oder `cables` | `"code"` |
 | `prompt` | Text beim Öffnen des Rätsels | „Ein vierstelliges Zahlenschloss …“ |
-| `solution` | Die richtige Lösung | `"1973"` |
+| `solution` | Die richtige Lösung | `"2073"` |
 | `reward_item_id` | Welches Item man bei Erfolg bekommt | `"brechstange"` |
 | `solved_text` | Text bei richtiger Lösung | „Klick! Der Spind springt auf.“ |
 | `wrong_text` | Text bei falscher Lösung | „Das Schloss piept rot.“ |
@@ -188,8 +188,8 @@ Die Tür selbst bleibt in `blockers.csv` immer gleich. Gespeichert wird nur: *Di
 2. Er klickt auf die Tür.
    Prüfung: Ist der Blocker schon geöffnet? Nein. Hat der Player das nötige **Item** `brechstange`? Nein.
    → `locked_text` wird angezeigt, **nichts am Spielstand ändert sich** (A1).
-3. Er klickt auf das Wandfach. Das **Item** `logbuch` wandert vom Room ins Inventar. Im Logbuch liest er: Baujahr 1973.
-4. Er klickt auf den Spind. Das **Puzzle** `spind` öffnet sich, er gibt `1973` ein.
+3. Er klickt auf das Wandfach. Das **Item** `logbuch` wandert vom Room ins Inventar. Im Logbuch liest er: Baujahr 2073.
+4. Er klickt auf den Spind. Das **Puzzle** `spind` öffnet sich, er gibt `2073` ein.
    → `solved_text`, und das **Item** `brechstange` kommt ins Inventar.
 5. Er klickt erneut auf die Tür. Jetzt hat er das Item.
    → `opened_text`, `defekte_tuer` wird beim Player als geöffnet gespeichert, er steht in `crew`. Die Brechstange bleibt im Inventar (A2).

@@ -25,8 +25,8 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
   - **Defekte Automatiktür** zu Raum 2
 - **Lösungsweg:**
   1. Das Wandfach öffnen und das Logbuch nehmen. Es wandert ins Inventar und lässt sich jederzeit aufklappen.
-  2. Im aufgeklappten Logbuch steht das Baujahr des Schiffs: **1973**.
-  3. Am Spind öffnet sich ein Zahlenschloss-Interface. Wer `1973` eingibt, bekommt die **Brechstange**.
+  2. Im aufgeklappten Logbuch steht das Baujahr des Schiffs: **2073**.
+  3. Am Spind öffnet sich ein Zahlenschloss-Interface. Wer `2073` eingibt, bekommt die **Brechstange**.
   4. Mit der Brechstange die defekte Tür aufhebeln. Weiter geht es nach Raum 2.
 
 ### Raum 2: Crew-Quartier
@@ -57,7 +57,7 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
 |---|---|
 | Logbuch, Brechstange, Zugangskarte, Schraubenzieher | **Item** |
 | Wandfach | Ist kein eigenes Element. Hier liegt das Logbuch im Flur (Room enthält Item). „Wandfach öffnen“ = Logbuch aufheben |
-| Spind mit Zahlenschloss | **Puzzle** im Flur: Lösung `1973`, Belohnung Brechstange |
+| Spind mit Zahlenschloss | **Puzzle** im Flur: Lösung `2073`, Belohnung Brechstange |
 | Stromkreis | **Puzzle** im Crew-Quartier, Belohnung Zugangskarte |
 | Defekte Tür | **Blocker** auf dem Weg Flur → Crew-Quartier, braucht die Brechstange |
 | Sicherheitsschott | **Blocker** auf dem Weg Crew-Quartier → Labor, braucht die Zugangskarte |

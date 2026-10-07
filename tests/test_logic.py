@@ -35,7 +35,7 @@ def play(world, player, *steps):
 WINNING_PATH = [
     ("take", "logbuch"),
     ("take", "schraubenzieher"),
-    ("solve", "spind", "1973"),
+    ("solve", "spind", "2073"),
     ("go", "crew"),
     ("solve", "kabel", "red,yellow,green,blue"),
     ("go", "labor"),
@@ -55,7 +55,7 @@ def test_a1_blocked_route_changes_nothing(world):
 # ---------- A2: Item öffnet Weg und bleibt im Inventar ----------
 
 def test_a2_item_opens_route_and_is_kept(world):
-    player = play(world, logic.new_game(), ("solve", "spind", "1973"))
+    player = play(world, logic.new_game(), ("solve", "spind", "2073"))
     player, message = logic.move(world, player, "crew")
     assert player["current_room_id"] == "crew"
     assert "defekte_tuer" in player["opened_blockers"]
@@ -64,7 +64,7 @@ def test_a2_item_opens_route_and_is_kept(world):
 
 
 def test_opened_blocker_stays_open_both_ways(world):
-    player = play(world, logic.new_game(), ("solve", "spind", "1973"), ("go", "crew"), ("go", "flur"))
+    player = play(world, logic.new_game(), ("solve", "spind", "2073"), ("go", "crew"), ("go", "flur"))
     player, message = logic.move(world, player, "crew")
     assert player["current_room_id"] == "crew"
     assert world["blockers"]["defekte_tuer"]["opened_text"] not in message
@@ -80,8 +80,8 @@ def test_a3_item_collected_only_once(world):
 
 
 def test_a3_puzzle_reward_only_once(world):
-    player = play(world, logic.new_game(), ("solve", "spind", "1973"))
-    again, message = logic.solve_puzzle(world, player, "spind", "1973")
+    player = play(world, logic.new_game(), ("solve", "spind", "2073"))
+    again, message = logic.solve_puzzle(world, player, "spind", "2073")
     assert again["inventory"].count("brechstange") == 1
     assert message == "You have already solved that."
 
@@ -102,7 +102,7 @@ def test_wrong_code_changes_nothing(world):
 
 
 def test_cable_answer_is_normalized(world):
-    player = play(world, logic.new_game(), ("solve", "spind", "1973"), ("go", "crew"))
+    player = play(world, logic.new_game(), ("solve", "spind", "2073"), ("go", "crew"))
     player, _ = logic.solve_puzzle(world, player, "kabel", "Red, Yellow, Green, Blue")
     assert "zugangskarte" in player["inventory"]
 
@@ -174,7 +174,7 @@ def test_hotspot_opens_puzzle_then_shows_done_text(world):
     player = logic.new_game()
     _, _, puzzle_id = logic.click_hotspot(world, player, "spind")
     assert puzzle_id == "spind"
-    player = play(world, player, ("solve", "spind", "1973"))
+    player = play(world, player, ("solve", "spind", "2073"))
     _, message, puzzle_id = logic.click_hotspot(world, player, "spind")
     assert puzzle_id is None
     assert message == "The locker is open and empty."
