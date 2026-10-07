@@ -441,6 +441,41 @@ def inject_css(alarm=False):
             width: 10px; height: 10px; background: var(--danger); box-shadow: 0 0 10px var(--danger);
             transform: rotate(45deg);  /* Raute statt Kreis */
         }}
+        /* Kabel-Auswahl: jeder Knopf ist ein Kabelstück mit Tülle und Metallstecker */
+        .st-key-cablepanel [role="radiogroup"] {{
+            gap: 36px !important; padding: 4px 26px 6px 2px; flex-wrap: wrap;
+            overflow: visible !important; mask-image: none !important; -webkit-mask-image: none !important;
+        }}
+        .st-key-cablepanel [data-testid="stButtonGroup"] * {{ mask-image: none !important; -webkit-mask-image: none !important; }}
+        .st-key-cablepanel [role="radiogroup"] button {{
+            position: relative; overflow: visible !important; width: 74px; height: 20px; min-height: 20px !important;
+            padding: 0 !important; border: none !important; border-radius: 10px 3px 3px 10px !important;
+            clip-path: none !important; opacity: .5; transition: opacity .15s, transform .15s, box-shadow .15s;
+            background-color: var(--cable) !important;
+            background-image: linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.15) 30%,
+                              rgba(0,0,0,0) 55%, rgba(0,0,0,.45) 100%) !important;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .55) !important;
+        }}
+        .st-key-cablepanel [role="radiogroup"] button::before {{   /* schwarze Tülle */
+            content: ""; position: absolute; right: -9px; top: 2px; width: 10px; height: 16px; border-radius: 2px;
+            background: linear-gradient(180deg, #4a4a52, #16161a 60%, #0b0b0e);
+        }}
+        .st-key-cablepanel [role="radiogroup"] button::after {{    /* Metallstecker mit Kontaktstiften */
+            content: ""; position: absolute; right: -21px; top: 5px; width: 12px; height: 10px; border-radius: 1px;
+            background: linear-gradient(180deg, #f2f2f4, #a3a3ab 50%, #5f5f68);
+            box-shadow: 4px -2px 0 -3px #d0d0d6, 4px 2px 0 -3px #d0d0d6;
+        }}
+        .st-key-cablepanel [role="radiogroup"] button:nth-of-type(1) {{ --cable: #e0393e; }}
+        .st-key-cablepanel [role="radiogroup"] button:nth-of-type(2) {{ --cable: #f2c230; }}
+        .st-key-cablepanel [role="radiogroup"] button:nth-of-type(3) {{ --cable: #3bb54a; }}
+        .st-key-cablepanel [role="radiogroup"] button:nth-of-type(4) {{ --cable: #2f7fe0; }}
+        .st-key-cablepanel [role="radiogroup"] button:hover {{ opacity: .85; }}
+        .st-key-cablepanel [role="radiogroup"] button[aria-checked="true"] {{   /* gewählt: leuchtet, „eingesteckt“ */
+            opacity: 1; transform: translateX(5px);
+            box-shadow: 0 0 0 2px var(--amber), 0 0 16px var(--cable), 0 3px 6px rgba(0, 0, 0, .55) !important;
+        }}
+        .st-key-cablepanel [role="radiogroup"] button p {{ font-size: 0 !important; }}   /* Farbname nur für Screenreader */
+
         .st-key-cablepanel [data-testid="stWidgetLabel"] p {{
             font-family: 'Chakra Petch', sans-serif; font-size: .72rem; letter-spacing: .2em; color: var(--muted);
         }}
@@ -659,7 +694,6 @@ def code_lock(puzzle_id):
 
 
 CABLE_COLORS = {"red": "#e0393e", "yellow": "#f2c230", "green": "#3bb54a", "blue": "#2f7fe0"}
-CABLE_EMOJIS = {"red": "🔴", "yellow": "🟡", "green": "🟢", "blue": "🔵"}
 
 
 def sockets_svg(plugged, paper):
@@ -707,7 +741,7 @@ def cable_panel(puzzle_id):
         drawing, choices = st.columns([1, 1], vertical_alignment="center")
         with choices:
             for i, key in enumerate(keys):
-                st.pills(f"SOCKET {i + 1}", list(CABLE_COLORS), key=key, format_func=lambda c: f"{CABLE_EMOJIS[c]} {c}")
+                st.pills(f"SOCKET {i + 1}", list(CABLE_COLORS), key=key)  # per CSS als Kabelstücke gezeichnet
         plugged = [st.session_state.get(k) for k in keys]
         drawing.markdown(sockets_svg(plugged, paper=False), unsafe_allow_html=True)  # nach der Auswahl zeichnen
         submitted = st.button("⚡ CONNECT", type="primary", width="stretch")
