@@ -379,7 +379,11 @@ def inject_css(alarm=False):
         .st-key-caption h1 {{ font-size: 2.6rem; letter-spacing: .22em; text-shadow: 0 0 24px rgba(255, 179, 33, .4); }}
 
         .minimap {{ position: fixed; right: 18px; bottom: 18px; z-index: 1000; pointer-events: none; padding: 10px; }}
-        .minimap .goal {{ animation: goal 1.2s ease-in-out infinite; }}
+        .minimap .goal-glow {{ animation: glow 1.2s ease-in-out infinite; filter: drop-shadow(0 0 4px #ff3b3b); }}
+        .minimap .you-ring {{ animation: ring 1.6s ease-out infinite; transform-box: fill-box; transform-origin: center; }}
+        .minimap .lock {{ filter: drop-shadow(0 0 3px rgba(255, 77, 77, .9)); }}
+        @keyframes glow {{ 0%, 100% {{ opacity: .35; }} 50% {{ opacity: 1; }} }}
+        @keyframes ring {{ 0% {{ opacity: .9; transform: scale(.6); }} 100% {{ opacity: 0; transform: scale(1.3); }} }}
 
         /* Pop-ups: großes Hologramm-Panel */
         [role="dialog"] {{  /* Streamlit rendert Pop-ups als <section role="dialog"> */
@@ -511,52 +515,84 @@ def timer():
                 f'</div></div>', unsafe_allow_html=True)
 
 
+# Grundrisse für die Mini-Map, ungefähr wie die Räume auf den Bildern (Punkte in einer 72×50-Kachel).
+# Türen liegen immer auf halber Höhe (y = 25). "goal" ist die Stelle des Generators.
+MAP_SHAPES = {
+    "flur": {"points": [(0, 16), (72, 16), (72, 34), (0, 34)]},                       # langer, schmaler Flur
+    "crew": {"points": [(0, 3), (54, 3), (54, 47), (18, 47), (18, 39), (0, 39)]},      # mit Nische der Koje
+    "labor": {"points": [(0, 0), (64, 0), (72, 8), (72, 50), (0, 50)], "goal": (58, 36)},
+}
+MAP_TILE, MAP_GAP, MAP_LINE = (72, 50), 18, "#2ee6d6"
+
+
+def lock_icon(x, y):
+    """Kleines rotes Vorhängeschloss, Mittelpunkt bei (x, y)."""
+    return (f'<g class="lock" transform="translate({x - 5},{y - 7})">'
+            f'<path d="M2 6 V4 a3 3 0 0 1 6 0 V6" fill="none" stroke="#ff4d4d" stroke-width="1.6"/>'
+            f'<rect x="0" y="6" width="10" height="8" rx="1.5" fill="#ff4d4d"/>'
+            f'<rect x="4.3" y="8.5" width="1.4" height="3" fill="#2a0a0a"/></g>')
+
+
+def player_icon(x, y):
+    """Leuchtendes Spieler-Symbol (Kopf und Schultern) mit pulsierendem Ring."""
+    return (f'<circle class="you-ring" cx="{x}" cy="{y}" r="9" fill="none" stroke="#ffb321" stroke-width="1.5"/>'
+            f'<circle cx="{x}" cy="{y - 2.5}" r="2.6" fill="#ffb321"/>'
+            f'<path d="M{x - 4.5} {y + 5} a4.5 4 0 0 1 9 0 Z" fill="#ffb321"/>')
+
+
 def minimap(world, player):
-    """Mini-Map unten rechts: gezeichnet aus den Rooms (Position) und der Map (Wege)."""
+    """Mini-Map unten rechts: Grundrisse der Rooms, verbunden durch die Wege der Map.
+
+    Rotes Schloss: Auf dem Weg liegt ein Blocker, den der Player noch nicht öffnen kann
+    (weder schon geöffnet noch das nötige Item dabei).
+    """
     rooms = {rid: r for rid, r in world["rooms"].items() if r["map_x"] != ""}
     goal = logic.goal_room_id(world)
-    box_w, box_h, gap = 126, 44, 30
+    tile_w, tile_h = MAP_TILE
 
-    def pos(room):
-        return 10 + int(room["map_x"]) * (box_w + gap), 10 + int(room["map_y"]) * (box_h + gap)
+    def origin(room):
+        return 8 + int(room["map_x"]) * (tile_w + MAP_GAP), 8 + int(room["map_y"]) * (tile_h + 22)
 
-    parts = []
-    drawn = set()
+    def shape(rid):
+        return MAP_SHAPES.get(rid, {"points": [(0, 0), (tile_w, 0), (tile_w, tile_h), (0, tile_h)]})
+
+    def edge(rid, side):
+        """x-Koordinate der linken bzw. rechten Wand in Türhöhe."""
+        xs = [x for x, _ in shape(rid)["points"]]
+        return origin(rooms[rid])[0] + (max(xs) if side == "right" else min(xs))
+
+    parts, drawn = [], set()
     for exit in world["exits"]:
         a, b = exit["from_room_id"], exit["to_room_id"]
         if a not in rooms or b not in rooms or frozenset((a, b)) in drawn:
             continue
         drawn.add(frozenset((a, b)))
-        blockers = [e["blocker_id"] for e in world["exits"]
+        left, right = sorted((a, b), key=lambda rid: int(rooms[rid]["map_x"]))
+        x1, x2 = edge(left, "right"), edge(right, "left")
+        y = origin(rooms[left])[1] + 25
+        parts.append(f'<line x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" stroke="{MAP_LINE}" stroke-width="2"/>')
+        blockers = [world["blockers"][e["blocker_id"]] for e in world["exits"]
                     if {e["from_room_id"], e["to_room_id"]} == {a, b} and e["blocker_id"]]
-        locked = any(bid not in player["opened_blockers"] for bid in blockers)
-        (ax, ay), (bx, by) = pos(rooms[a]), pos(rooms[b])
-        x1, y1, x2, y2 = ax + box_w, ay + box_h / 2, bx, by + box_h / 2
-        dash = 'stroke-dasharray="4 4"' if locked else ""
-        color = "#ff4d4d" if locked else "#2ee6d6"
-        parts.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{color}" stroke-width="3" {dash}/>')
-        if locked:
-            parts.append(f'<text x="{(x1 + x2) / 2}" y="{y1 - 8}" font-size="14" text-anchor="middle">🔒</text>')
+        if any(bl["id"] not in player["opened_blockers"] and bl["required_item_id"] not in player["inventory"]
+               for bl in blockers):
+            parts.append(lock_icon((x1 + x2) / 2, y - 9))
 
     for rid, room in rooms.items():
-        x, y = pos(room)
-        here = rid == player["current_room_id"]
-        fill = "rgba(255,179,33,.28)" if here else "rgba(255,255,255,.05)"
-        css = 'class="goal"' if rid == goal else ""
-        stroke = "#ff4fa3" if rid == goal else "#ffb321" if here else "rgba(255,255,255,.35)"
-        c = 8  # abgeschrägte Ecken wie bei den Panels
-        corners = (f"{x + c},{y} {x + box_w},{y} {x + box_w},{y + box_h - c} "
-                   f"{x + box_w - c},{y + box_h} {x},{y + box_h} {x},{y + c}")
-        parts.append(f'<polygon {css} points="{corners}" fill="{fill}" stroke="{stroke}" stroke-width="2"/>')
-        parts.append(f'<text x="{x + box_w / 2}" y="{y + box_h / 2 + 4}" font-size="10.5" fill="#f6f1e7" '
-                     f'text-anchor="middle" letter-spacing="1.5" font-family="Chakra Petch, sans-serif">'
+        ox, oy = origin(room)
+        points = " ".join(f"{ox + x},{oy + y}" for x, y in shape(rid)["points"])
+        parts.append(f'<polygon points="{points}" fill="rgba(46,230,214,.07)" stroke="{MAP_LINE}" stroke-width="1.6"/>')
+        if rid == goal:
+            gx, gy = shape(rid).get("goal", (tile_w / 2, tile_h / 2))
+            parts.append(f'<circle class="goal-glow" cx="{ox + gx}" cy="{oy + gy}" r="7" fill="#ff3b3b"/>'
+                         f'<circle cx="{ox + gx}" cy="{oy + gy}" r="2.5" fill="#ffd0d0"/>')
+        if rid == player["current_room_id"]:
+            parts.append(player_icon(ox + tile_w / 2 - (8 if rid == goal else 0), oy + 25))
+        parts.append(f'<text x="{ox + tile_w / 2}" y="{oy + tile_h + 13}" font-size="8" fill="#b8b0cf" '
+                     f'text-anchor="middle" letter-spacing="1.2" font-family="Chakra Petch, sans-serif">'
                      f'{html.escape(room["name"].upper())}</text>')
-        if here:
-            parts.append(f'<polygon points="{x + box_w - 10},{y + 4} {x + box_w - 5},{y + 9} '
-                         f'{x + box_w - 10},{y + 14} {x + box_w - 15},{y + 9}" fill="#ffb321"/>')
 
-    width = 20 + max(int(r["map_x"]) for r in rooms.values()) * (box_w + gap) + box_w
-    height = 20 + max(int(r["map_y"]) for r in rooms.values()) * (box_h + gap) + box_h
+    width = 16 + max(int(r["map_x"]) for r in rooms.values()) * (tile_w + MAP_GAP) + tile_w
+    height = 30 + max(int(r["map_y"]) for r in rooms.values()) * (tile_h + 22) + tile_h
     st.markdown(f'<div class="minimap"><svg width="{width}" height="{height}">{"".join(parts)}</svg></div>',
                 unsafe_allow_html=True)
 
