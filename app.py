@@ -78,6 +78,15 @@ def start_new_game():
     st.session_state.message = ""
 
 
+def end_game():
+    """Nach einem Ende zurück zum Startbildschirm. Die Partie ist vorbei, deshalb wird der Spielstand gelöscht."""
+    db.delete_save()
+    st.session_state.player = None
+    st.session_state.screen = "start"
+    st.session_state.slide = 0
+    st.session_state.message = ""
+
+
 def resume_game():
     player = db.load_player()
     if player is None:  # Spielstand wurde inzwischen gelöscht
@@ -716,8 +725,8 @@ def ending_screen(world, player):
     with st.container(key="caption"):
         st.title("✅ Saved!" if player["status"] == "won" else "💀 Out of Air")
         st.write(room["description"])
-        if st.button("New game", type="primary"):
-            start_new_game()
+        if st.button("End Game", type="primary"):
+            end_game()
             st.rerun()
 
 
