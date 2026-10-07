@@ -205,3 +205,15 @@ def test_every_csv_row_has_all_columns():
         with open(path, newline="", encoding="utf-8") as f:
             rows = list(csv.reader(f))
         assert all(len(row) == len(rows[0]) for row in rows), path.name
+
+
+def test_hotspot_changes_follow_player_state(world):
+    """Grundlage der adaptiven Bilder: Was hat sich im Raum sichtbar verändert?"""
+    spots = {h["id"]: h for h in world["hotspots"]}
+    player = logic.new_game()
+    assert not any(logic.is_hotspot_changed(world, player, h) for h in world["hotspots"])
+
+    player = play(world, player, ("take", "logbuch"), ("solve", "spind", "2073"), ("go", "crew"))
+    changed = {h["id"] for h in world["hotspots"] if logic.is_hotspot_changed(world, player, h)}
+    assert changed == {"wandfach", "spind", "tuer_crew"}   # Schraubenzieher liegt noch da
+    assert not logic.is_hotspot_changed(world, player, spots["fenster"])

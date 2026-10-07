@@ -106,6 +106,7 @@ Gelöste Puzzles werden **nicht** extra gespeichert. Jedes Puzzle gibt genau ein
 | `name` | Anzeigename | `"Flur"` |
 | `description` | Text, den der Spieler liest | „Rotes Alarmlicht flackert …“ |
 | `image` | Bild für die Szene | `flur.png` |
+| `image_after` | Danach-Bild: alle Objekte im veränderten Zustand. Das Spiel blendet daraus nur die Stellen ein, die sich verändert haben (leer = keins) | `Flur after.jpeg` |
 | `ending` | Leer für normale Räume, `won` oder `lost` für ein Ende | `""` |
 | `map_x`, `map_y` | Position auf der Mini-Map (leer bei den Enden) | `0`, `0` |
 

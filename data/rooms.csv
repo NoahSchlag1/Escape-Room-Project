@@ -1,6 +1,6 @@
-id,name,description,image,ending,map_x,map_y
-flur,Corridor,"Red emergency lights pulse across the walls. Through the big window the alien planet glows – so close, and yet out of reach if the air runs out.",Flur.jpeg,,0,0
-crew,Crew Quarters,"Bunks, a knocked-over mug, photos on the wall. The emergency lights bathe everything in a faint blue. At the far end: a locked security bulkhead.",Crew Cabin.jpeg,,1,0
-labor,Laboratory,"Samples from the planet float in glowing glass tanks. In the corner the oxygen generator is smoking, and the wall is torn open where the meteorite scraped the hull.",Laboratory.jpeg,,2,0
-ende_gerettet,Saved,The generator hums steadily again. Fresh air flows through the ship – and a few hours later you touch down gently on the red planet.,Outro saved.jpeg,won,,
-ende_luft_aus,Out of Air,"Breathing gets harder, your vision blurs. The generator didn't come back online in time.",Outro Out of oxygen.jpeg,lost,,
+id,name,description,image,image_after,ending,map_x,map_y
+flur,Corridor,"Red emergency lights pulse across the walls. Through the big window the alien planet glows – so close, and yet out of reach if the air runs out.",Flur.jpeg,Flur after.jpeg,,0,0
+crew,Crew Quarters,"Bunks, a knocked-over mug, photos on the wall. The emergency lights bathe everything in a faint blue. At the far end: a locked security bulkhead.",Crew Cabin.jpeg,Crew Cabin after.jpeg,,1,0
+labor,Laboratory,"Samples from the planet float in glowing glass tanks. In the corner the oxygen generator is smoking, and the wall is torn open where the meteorite scraped the hull.",Laboratory.jpeg,,,2,0
+ende_gerettet,Saved,The generator hums steadily again. Fresh air flows through the ship – and a few hours later you touch down gently on the red planet.,Outro saved.jpeg,,won,,
+ende_luft_aus,Out of Air,"Breathing gets harder, your vision blurs. The generator didn't come back online in time.",Outro Out of oxygen.jpeg,,lost,,

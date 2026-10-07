@@ -4,15 +4,17 @@ Hier steht, *was* im Spiel passiert. Wie die Entities zusammenhängen, steht in 
 
 ## Setting
 
-- Du bist auf einem **Raumschiff** auf dem Weg zu einem fremden Planeten. Er sieht aus wie der Mars, aber dort leben seltsame Kreaturen.
+- Die Menschheit auf der Erde ist durch eine weltweite Apokalypse ausgestorben (Kriege, Klimakollaps, tote Ozeane). Nur eine kleine Crew ist mit einem **Raumschiff von 2073** entkommen.
+- Ihre Mission: einen Planeten finden, auf dem Menschen überleben können. Nach 212 Tagen haben die Scanner einen gefunden: einen roten Wüstenplaneten mit Wasser unter der Oberfläche und atembarer Luft.
 - Ein Meteorit hat das Schiff gestreift und dabei den **Sauerstoffgenerator** beschädigt, zwei Räume vom Flur entfernt. Wenn er nicht repariert wird, geht die Luft aus.
 - Timer: **10 Minuten**. Der Wert wird durch Testspielen angepasst.
 
 ## Ablauf
 
-### Intro (2–3 Bild-Slides, weiter per Klick)
-1. Der Zielplanet in Nahaufnahme (Makro): rote Oberfläche, seltsame Kreaturen.
-2. –3. Überleitung auf das Schiff: „Du bist im Flur …“
+### Intro (3 Bild-Slides, weiter per Klick)
+1. Die Erde ist verstummt: Eine weltweite Apokalypse hat die Menschheit ausgelöscht, nur eine kleine Crew ist entkommen.
+2. Die Mission: ein neuer Planet für die Menschheit. Nach 212 Tagen ist er gefunden, die Landung steht kurz bevor.
+3. Im Flur: Ein Meteorit streift das Schiff, Alarm, irgendwo entweicht Luft.
 
 ### Raum 1: Flur
 - **Start:** Durchs Fenster sieht man den **Zielplaneten**. Dann gehen das rote Alarmlicht und die Durchsage los: Ein Meteorit hat das Schiff gestreift, der Sauerstoffgenerator ist beschädigt. Ab jetzt läuft der Timer.

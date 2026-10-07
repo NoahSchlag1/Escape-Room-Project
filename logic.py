@@ -57,6 +57,21 @@ def is_puzzle_solved(world, player, puzzle_id):
     return world["puzzles"][puzzle_id]["reward_item_id"] in player["inventory"]
 
 
+def is_hotspot_changed(world, player, hotspot):
+    """Hat sich das Objekt hinter diesem Hotspot verändert? (für die adaptiven Bilder)
+
+    Item genommen, Rätsel gelöst oder Blocker auf dem Weg geöffnet.
+    """
+    if hotspot["item_id"]:
+        return hotspot["item_id"] in player["inventory"]
+    if hotspot["puzzle_id"]:
+        return is_puzzle_solved(world, player, hotspot["puzzle_id"])
+    if hotspot["to_room_id"]:
+        exit = find_exit(world, hotspot["room_id"], hotspot["to_room_id"])
+        return bool(exit and exit["blocker_id"] and exit["blocker_id"] in player["opened_blockers"])
+    return False
+
+
 def hotspots_in_room(world, room_id):
     return [h for h in world["hotspots"] if h["room_id"] == room_id]
 

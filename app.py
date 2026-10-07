@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 import streamlit as st
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from streamlit_image_coordinates import streamlit_image_coordinates
 
 import db
@@ -24,9 +24,14 @@ FONT_FILES = ["Arial.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf", "Deja
               "C:/Windows/Fonts/arial.ttf"]
 
 INTRO_SLIDES = [
-    ("Intro 1.jpeg", "An alien planet. Red like Mars – and your destination."),
-    ("Intro 2.jpeg", "Your ship has been travelling towards it for 212 days. Only a few hours left until landing."),
-    ("Intro 3.jpeg", "You are walking down the corridor when a screeching scrape shakes the whole ship …"),
+    ("Intro 1.jpeg", "Earth has fallen silent. A worldwide apocalypse – endless wars, a collapsing climate, "
+                     "oceans that stopped giving life – wiped out humanity on its home planet. "
+                     "Only a small crew escaped in time, aboard a ship built in 2073."),
+    ("Intro 2.jpeg", "Your mission: find a new world where humans can survive. After 212 days in deep space, "
+                     "the scanners finally picked one up – a red desert planet with water beneath its surface "
+                     "and air that can be breathed. In a few hours, you will be the first humans to land."),
+    ("Intro 3.jpeg", "You are walking down the corridor when a screeching scrape shakes the whole ship. "
+                     "Alarms howl. Somewhere, air is hissing out into space …"),
 ]
 OUTRO_SLIDES = [
     ("Outro 1.jpeg", "The generator is running. The ship enters the atmosphere of the red planet."),
@@ -141,12 +146,19 @@ def load_image(filename, title):
 
 
 @st.cache_data(show_spinner=False)
-def scene_image(filename, title, markers, image_mtime=0):
-    """Szenenbild mit einem leuchtenden Sechseck auf jedem klickbaren Objekt.
+def scene_image(filename, after_filename, title, patches, markers, image_mtimes=()):
+    """Szenenbild: Grundbild + veränderte Stellen aus dem Danach-Bild + Sechsecke auf klickbaren Objekten.
 
+    patches: Tupel aus (x, y, w, h) in Prozent – Objekte, die sich verändert haben (z. B. offener Spind).
+             Diese Stellen werden aus dem Danach-Bild mit weichem Rand über das Grundbild gelegt.
     markers: Tupel aus (x, y, w, h) in Prozent – nur Hotspots, die noch etwas tun.
+    image_mtimes: Änderungszeiten der Bilddateien, damit ein ersetztes Bild neu geladen wird.
     """
     image = load_image(filename, title)
+    after_path = IMAGE_DIR / after_filename if after_filename else None
+    if patches and after_path and after_path.exists():
+        after = Image.open(after_path).convert("RGB").resize(image.size)
+        image.paste(after, (0, 0), patch_mask(image.size, patches))
     overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
     width, height = image.size
@@ -167,16 +179,33 @@ def scene_image(filename, title, markers, image_mtime=0):
     return image
 
 
+def rect(spot):
+    return tuple(float(spot[k]) for k in ("x", "y", "w", "h"))
+
+
 def visible_markers(world, player, hotspots):
-    """Kreise nur dort, wo noch etwas passiert: genommene Items und gelöste Rätsel verschwinden."""
-    markers = []
-    for spot in hotspots:
-        if spot["item_id"] and spot["item_id"] in player["inventory"]:
-            continue
-        if spot["puzzle_id"] and logic.is_puzzle_solved(world, player, spot["puzzle_id"]):
-            continue
-        markers.append(tuple(float(spot[k]) for k in ("x", "y", "w", "h")))
-    return tuple(markers)
+    """Sechsecke nur dort, wo noch etwas passiert: genommene Items und gelöste Rätsel verschwinden.
+
+    Türen behalten ihr Sechseck, auch wenn sie offen sind – man kann ja weiter durchgehen.
+    """
+    return tuple(rect(spot) for spot in hotspots
+                 if not ((spot["item_id"] or spot["puzzle_id"]) and logic.is_hotspot_changed(world, player, spot)))
+
+
+def changed_patches(world, player, hotspots):
+    """Bereiche, die aus dem Danach-Bild genommen werden: alle Objekte, die sich verändert haben."""
+    return tuple(rect(spot) for spot in hotspots if logic.is_hotspot_changed(world, player, spot))
+
+
+def patch_mask(size, patches, padding=1.5):
+    """Graustufen-Maske: weiß = Danach-Bild, schwarz = Grundbild, mit weichem Übergang am Rand."""
+    width, height = size
+    mask = Image.new("L", size, 0)
+    draw = ImageDraw.Draw(mask)
+    for x, y, w, h in patches:
+        draw.rectangle(((x - padding) / 100 * width, (y - padding) / 100 * height,
+                        (x + w + padding) / 100 * width, (y + h + padding) / 100 * height), fill=255)
+    return mask.filter(ImageFilter.GaussianBlur(width / 120))
 
 
 def find_hotspot(hotspots, click):
@@ -309,6 +338,7 @@ def inject_css(alarm=False):
             width: min(760px, 92vw) !important; padding: 20px 26px; gap: .8rem !important;
             border-left: 3px solid var(--amber);
         }}
+        .st-key-caption .stButton {{ margin-top: .8rem; }}
         .st-key-caption h1 {{ font-size: 2.6rem; letter-spacing: .22em; text-shadow: 0 0 24px rgba(255, 179, 33, .4); }}
 
         .minimap {{ position: fixed; right: 18px; bottom: 18px; z-index: 1000; pointer-events: none; padding: 10px; }}
@@ -706,9 +736,10 @@ def game_screen(world):
     st.markdown(f'<div class="room-title"><small>LOCATION</small><span>{html.escape(room["name"])}</span></div>',
                 unsafe_allow_html=True)
 
-    path = IMAGE_DIR / room["image"]
-    mtime = path.stat().st_mtime if path.exists() else 0
-    image = scene_image(room["image"], room["name"], visible_markers(world, player, hotspots), mtime)
+    mtimes = tuple((IMAGE_DIR / name).stat().st_mtime if name and (IMAGE_DIR / name).exists() else 0
+                   for name in (room["image"], room["image_after"]))
+    image = scene_image(room["image"], room["image_after"], room["name"],
+                        changed_patches(world, player, hotspots), visible_markers(world, player, hotspots), mtimes)
     click = streamlit_image_coordinates(image, key=f"scene_{room['id']}", use_column_width="always",
                                         cursor="pointer", image_format="JPEG", jpeg_quality=90)
     # Nur neue Klicks verarbeiten: Die Komponente liefert den letzten Klick bei jedem Neuladen erneut.
